@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angula
 import { merge, fromEvent } from 'rxjs';
 import { map, distinct, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { SearchService } from 'src/app/services/search.service';
+import { TargetsService } from 'src/app/services/targets.service';
 
 @Component({
   selector: 'sdal-search',
@@ -10,13 +11,12 @@ import { SearchService } from 'src/app/services/search.service';
 })
 export class SearchComponent implements OnInit, AfterViewInit {
 
-  public text;
-
   @ViewChild('query', { static: false })
-  queryElem: ElementRef<HTMLInputElement>;
+  private queryElem!: ElementRef<HTMLInputElement>;
 
   constructor(
-    public readonly search: SearchService
+    public readonly search: SearchService,
+    public readonly targets: TargetsService
   ) { }
 
   ngOnInit() {
@@ -31,6 +31,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
       debounceTime(200),
       // map()
     ).subscribe(q => this.search.query.next(q));
+  }
+
+  public addGroup(group: string) {
+    this.targets.addGroup(group);
   }
 
 }

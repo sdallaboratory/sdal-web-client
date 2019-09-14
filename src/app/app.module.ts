@@ -11,12 +11,16 @@ import { HomeComponent } from './components/home/home.component';
 import { InitService } from './services/init.service';
 import { SearchComponent } from './components/search/search.component';
 import { FormsModule } from '@angular/forms';
+import { TargetsComponent } from './components/targets/targets.component';
+import { ScheduleTableComponent } from './components/schedule-table/schedule-table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    SearchComponent
+    SearchComponent,
+    TargetsComponent,
+    ScheduleTableComponent
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,6 @@
-<p>search works!</p>
-<h2 mat-subheader>
+<h3 mat-subheader>
     Добавление групп
-</h2>
+</h3>
 <mat-form-field>
     <input #query type="text" matInput>
     <!-- <input #query type="text" matInput (ngModelChange)="onChange($event)"> -->
@@ -19,7 +18,7 @@
         <mat-list-item *ngFor="let group of results.groups">
             <mat-icon mat-list-icon>people_alt</mat-icon>
             <h4 mat-line class="group">{{group}}</h4>
-            <button class="add-button" mat-icon-button>
+            <button class="add-button" mat-icon-button (click)="addGroup(group)">
                 <mat-icon>add_circle_outlined</mat-icon>
             </button>
         </mat-list-item>

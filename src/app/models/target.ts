@@ -1,7 +1,7 @@
 import { Student } from './student';
 import { GroupSchedule } from './schedule-models';
 
-export class Target {
+export interface Target {
     group: string;
     students?: Student[];
     scheduleLoaded: boolean;

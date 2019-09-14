@@ -1,0 +1,17 @@
+<ng-container *ngIf="targets.targetsObservable | async as targetsList; else noTargets">
+    <h3 mat-subheader>
+        Добавленные группы
+    </h3>
+    <mat-list>
+        <mat-list-item *ngFor="let target of targetsList">
+            <mat-icon mat-list-icon>{{target.scheduleLoaded ? 'group' : 'all_out'}}</mat-icon>
+            <h4 mat-line class="group">{{target.group}}</h4>
+            <button class="add-button" mat-icon-button (click)="targets.removeGroup(target.group)">
+                <mat-icon>clear</mat-icon>
+            </button>
+        </mat-list-item>
+    </mat-list>
+</ng-container>
+<ng-template #noTargets>
+    <p>Добавтьте хотя бы одну группу, чтобы посмотреть расписание</p>
+</ng-template>

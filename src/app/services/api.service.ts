@@ -12,8 +12,9 @@ export class ApiService {
     private readonly http: HttpClient
   ) { }
 
+  // TODO: Uppercase on server-side
   public getSchedule(groupName: string) {
-    return this.http.get<GroupSchedule>(`/api/schedule/groups/${groupName}`);
+    return this.http.get<GroupSchedule>(`/api/schedule/groups/${groupName.toUpperCase()}`);
   }
 
   public getGroups() {

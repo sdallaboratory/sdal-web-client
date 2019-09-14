@@ -16,13 +16,13 @@ export class SearchService {
 
   public readonly query = new Subject<string>();
 
-  private change = merge(this.query, this.targets.targets);
+  // private change = merge(this.query, this.targets.targetsObservable);
 
   public readonly groups = this.query.pipe(
     map(normalizeText),
     map(q => ([...this.groupsService.normalizedNames].filter(g => g.includes(q)))),
-    combineLatest(this.targets.targets), // TODO: Check this
-    map(([groups, targets]) => groups.filter(g => !targets.map(t => t.group).includes(g))),
+    combineLatest(this.targets.targetsObservable), // TODO: Check this
+    map(([groups, targets]) => groups.filter(g => !targets || !targets.map(t => t.group).includes(g))),
     map(groups => _.take(groups, 8)),
     map(groups => groups.length ? groups : null),
   );

@@ -39,7 +39,7 @@ export function normalizeText(query: string) {
     let ruLayout = lower;
     for (const letter in map) {
         if (map.hasOwnProperty(letter)) {
-            ruLayout = ruLayout.split(letter).join(map[letter]);
+            ruLayout = ruLayout.split(letter).join((map as any)[letter]);
         }
     }
     const singleSpaced = ruLayout.split(/\s+/).join(' ');
