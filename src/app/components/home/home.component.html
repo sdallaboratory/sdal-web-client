@@ -1,0 +1,17 @@
+<mat-sidenav-container class="example-sidenav-container">
+
+    <mat-sidenav #snav [mode]="(responsive.mobile | async) ? 'over' : 'side'">
+        <mat-nav-list>
+            <button mat-icon-button (click)="snav.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <button mat-icon-button (click)="snav.toggle()">
+            <mat-icon>menu</mat-icon>
+        </button>
+
+    </mat-sidenav-content>
+</mat-sidenav-container>
