@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GroupSchedule } from '../models/schedule-models';
+import { Student } from '../models/student';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class ApiService {
   }
 
   public searchStudents(query?: string, limit?: number) {
-    return this.http.get<string[]>(`/api/students`, {
+    return this.http.get<Student[]>(`/api/students`, {
       params: {
         query,
         limit

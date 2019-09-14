@@ -16,7 +16,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   queryElem: ElementRef<HTMLInputElement>;
 
   constructor(
-    private readonly search: SearchService
+    public readonly search: SearchService
   ) { }
 
   ngOnInit() {

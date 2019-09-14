@@ -1,0 +1,9 @@
+.group {
+    text-transform: uppercase;
+}
+
+mat-list-item:not(:hover) {
+    .add-button {
+        opacity: 0.2;
+    }
+}

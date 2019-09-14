@@ -13,4 +13,29 @@
         <mat-icon>help_outlined</mat-icon>
     </button>
 </mat-form-field>
-{{text}}
+<mat-action-list *ngIf="search.results | async as results; else nothingFound">
+    <ng-container *ngIf="results.groups">
+        <h3 mat-subheader>Группы</h3>
+        <mat-list-item *ngFor="let group of results.groups">
+            <mat-icon mat-list-icon>people_alt</mat-icon>
+            <h4 mat-line class="group">{{group}}</h4>
+            <button class="add-button" mat-icon-button>
+                <mat-icon>add_circle_outlined</mat-icon>
+            </button>
+        </mat-list-item>
+    </ng-container>
+    <!-- <mat-divider></mat-divider> -->
+    <ng-container *ngIf="results.students">
+        <h3 mat-subheader>Студенты</h3>
+        <mat-list-item *ngFor="let student of results.students">
+            <mat-icon mat-list-icon>person</mat-icon>
+            <h4 mat-line>{{student.name}}</h4>
+            <p mat-line class="group"> {{student.group}}</p>
+        </mat-list-item>
+    </ng-container>
+</mat-action-list>
+<ng-template #nothingFound>
+    <p>
+        По вашему запросу ничего не найдено. Возможно, расписание искомой группы отсутсвует в электоронном университете.
+    </p>
+</ng-template>
