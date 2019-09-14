@@ -1,19 +1,22 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
+import { normalizeText } from '../utils/normalize-query';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupsService {
 
-  public groupsNames: string[];
+  public normalizedNames!: Set<string>;
 
   constructor(
     private readonly api: ApiService
   ) { }
 
   public async init() {
-    this.groupsNames = await this.api.getGroups().toPromise();
+    const groupsNames = await this.api.getGroups().toPromise();
+    const normalized = groupsNames.map(normalizeText);
+    this.normalizedNames = new Set(normalized);
   }
 
 }

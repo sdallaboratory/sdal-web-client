@@ -13,9 +13,6 @@ export class ApiInterceptorService implements HttpInterceptor {
       url: `${environment.backendOrigin}${req.url}`,
     });
 
-    console.log(httpReq.url, environment);
-
-
     return next.handle(httpReq);
   }
 

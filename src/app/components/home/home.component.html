@@ -1,11 +1,13 @@
 <mat-sidenav-container class="example-sidenav-container">
 
-    <mat-sidenav #snav [mode]="(responsive.mobile | async) ? 'over' : 'side'">
-        <mat-nav-list>
+    <mat-sidenav #snav [mode]="(responsive.mobile | async) ? 'over' : 'side'" opened>
+        <h1>
+            SDAL Touch
             <button mat-icon-button (click)="snav.toggle()">
-                <mat-icon>menu</mat-icon>
+                <mat-icon>chevron_left</mat-icon>
             </button>
-        </mat-nav-list>
+        </h1>
+        <sdal-search></sdal-search>
     </mat-sidenav>
 
     <mat-sidenav-content>

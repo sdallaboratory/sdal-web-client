@@ -9,17 +9,20 @@ import { ApiInterceptorService } from './interceptors/api-interceptor.service';
 import { MaterialImportsModule } from './material-imports/material-imports.module';
 import { HomeComponent } from './components/home/home.component';
 import { InitService } from './services/init.service';
+import { SearchComponent } from './components/search/search.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    // FormsModule,
+    FormsModule,
     HttpClientModule,
     MaterialImportsModule,
   ],

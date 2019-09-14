@@ -19,4 +19,13 @@ export class ApiService {
     return this.http.get<string[]>(`/api/schedule/groups`);
   }
 
+  public searchStudents(query?: string, limit?: number) {
+    return this.http.get<string[]>(`/api/students`, {
+      params: {
+        query,
+        limit
+      } as any
+    });
+  }
+
 }
