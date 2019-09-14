@@ -4,6 +4,7 @@ import { Target } from '../models/target';
 import { ApiService } from './api.service';
 import _ from 'lodash';
 import { map } from 'rxjs/operators';
+import { StorageService } from './storage.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,7 +12,15 @@ export class TargetsService {
 
   constructor(
     private readonly api: ApiService,
-  ) { }
+    private readonly storage: StorageService
+  ) {
+    const groups = this.storage.getGroups();
+    if (groups) {
+      for (const group of groups) {
+        this.addGroup(group);
+      }
+    }
+  }
 
   private targets: Target[] = [];
 
@@ -43,6 +52,8 @@ export class TargetsService {
 
     this.targets.push(target);
     this.targetsSubject.next(this.targets);
+    this.storage.saveTargets(this.targets);
+
     return target;
   }
 
@@ -50,12 +61,14 @@ export class TargetsService {
     const target = this.targets.find(t => t.group === group);
     _.remove(this.targets, target);
     this.targetsSubject.next(this.targets);
+    this.storage.saveTargets(this.targets);
     return target;
   }
 
   public clear() {
     this.targets = [];
     this.targetsSubject.next(this.targets);
+    this.storage.saveTargets(this.targets);
   }
 
 }

@@ -1,0 +1,31 @@
+.time-slot {
+    display: flex;
+    justify-content: stretch;
+}
+
+.time-range {
+    flex: none;
+    border: 3px solid transparent;
+    width: 100px;
+}
+
+.odd {
+    background: #f1f1f1;
+}
+
+.groups-lessons {
+    flex: auto;
+    display: flex;
+    justify-content: stretch;
+    align-items: stretch;
+    * {
+        flex: 1 1 100%;
+        border: 3px solid transparent;
+    }
+    .group-lesson {
+        &:hover {
+            border-color: #00000044;
+        }
+        // word-break: break-all;
+    }
+}

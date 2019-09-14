@@ -4,6 +4,7 @@ export interface Lesson {
     name: string | null;
     teacher?: string;
     location?: string;
+    type: string;
 }
 
 export interface DaySchedule {
@@ -19,24 +20,16 @@ export interface GroupSchedule {
 
 // Frontend models
 
-export interface FlatLesson extends Lesson {
+export interface FullLesson extends Lesson {
     group: string;
     color: string;
     week: 'enumerator' | 'denominator';
     day: string;
 }
 
-export interface GroupLesson {
-    group: string;
-    color: string;
-    name: string | null;
-    teacher?: string;
-    location?: string;
-}
-
 export interface ScheduleTimeSlot {
     timeRange: string;
-    groupsLessons: GroupLesson[];
+    groupsLessons: FullLesson[];
 }
 
 export interface CombinedDaySchedule {

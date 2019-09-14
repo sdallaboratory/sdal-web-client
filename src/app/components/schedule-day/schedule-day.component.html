@@ -1,0 +1,21 @@
+<h3 mat-header>{{day.dayName}}</h3>
+<mat-card>
+    <div *ngFor="let slot of day.timeSlots; let odd = odd;" class="time-slot" [class.odd]="odd">
+        <div class="time-range">{{slot.timeRange}}</div>
+        <!-- <div style="display: flex; justify-content: sdivetch" class="group-lessons"> -->
+        <div class="groups-lessons">
+            <ng-container *ngFor="let lesson of slot.groupsLessons">
+                <div *ngIf="lesson.name; else empty" [style.background]="lesson.color"
+                    [matTooltip]="lesson | lessonTooltip" class="group-lesson" (click)="selectLesson(lesson)">
+                    <ng-container *ngIf="slot.groupsLessons.length <= 2">
+                        {{lesson.name}}
+                    </ng-container> {{lesson.location}}
+                </div>
+            </ng-container>
+            <ng-template #empty>
+                <div></div>
+            </ng-template>
+        </div>
+        <!-- </div> -->
+    </div>
+</mat-card>

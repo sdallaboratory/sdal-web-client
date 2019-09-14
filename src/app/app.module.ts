@@ -13,6 +13,10 @@ import { SearchComponent } from './components/search/search.component';
 import { FormsModule } from '@angular/forms';
 import { TargetsComponent } from './components/targets/targets.component';
 import { ScheduleTableComponent } from './components/schedule-table/schedule-table.component';
+import { ScheduleDayComponent } from './components/schedule-day/schedule-day.component';
+import { LessonTooltipPipe } from './pipes/lesson-tooltip.pipe';
+import { LessonDetailsComponent } from './components/lesson-details/lesson-details.component';
+import { RecommendationsComponent } from './components/recommendations/recommendations.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +24,11 @@ import { ScheduleTableComponent } from './components/schedule-table/schedule-tab
     HomeComponent,
     SearchComponent,
     TargetsComponent,
-    ScheduleTableComponent
+    ScheduleTableComponent,
+    ScheduleDayComponent,
+    LessonTooltipPipe,
+    LessonDetailsComponent,
+    RecommendationsComponent
   ],
   imports: [
     BrowserModule,

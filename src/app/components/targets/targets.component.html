@@ -4,7 +4,8 @@
     </h3>
     <mat-list>
         <mat-list-item *ngFor="let target of targetsList">
-            <mat-icon mat-list-icon>{{target.scheduleLoaded ? 'group' : 'all_out'}}</mat-icon>
+            <mat-icon mat-list-icon [style.color]="target.color ">{{target.scheduleLoaded ? 'group' : 'all_out'}}
+            </mat-icon>
             <h4 mat-line class="group">{{target.group}}</h4>
             <button class="add-button" mat-icon-button (click)="targets.removeGroup(target.group)">
                 <mat-icon>clear</mat-icon>
