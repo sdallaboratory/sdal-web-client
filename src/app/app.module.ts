@@ -17,6 +17,7 @@ import { ScheduleDayComponent } from './components/schedule-day/schedule-day.com
 import { LessonTooltipPipe } from './pipes/lesson-tooltip.pipe';
 import { LessonDetailsComponent } from './components/lesson-details/lesson-details.component';
 import { RecommendationsComponent } from './components/recommendations/recommendations.component';
+import { LessonNumberPipe } from './pipes/lesson-number.pipe';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { RecommendationsComponent } from './components/recommendations/recommend
     ScheduleDayComponent,
     LessonTooltipPipe,
     LessonDetailsComponent,
-    RecommendationsComponent
+    RecommendationsComponent,
+    LessonNumberPipe
   ],
   imports: [
     BrowserModule,
@@ -46,6 +48,7 @@ import { RecommendationsComponent } from './components/recommendations/recommend
       deps: [InitService],
       multi: true
     },
+    LessonNumberPipe
   ],
   bootstrap: [AppComponent]
 })

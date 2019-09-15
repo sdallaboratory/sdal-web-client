@@ -19,6 +19,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
     public readonly targets: TargetsService
   ) { }
 
+  public searchResultLength = this.search.results.pipe(
+    map(({ groups, students }) => (groups && groups.length || 0) + (students && students.length || 0)),
+  );
+
   ngOnInit() {
   }
 
@@ -35,6 +39,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
   public addGroup(group: string) {
     this.targets.addGroup(group);
+  }
+
+  public addFirst() {
+    // this.targets.addGroup()
   }
 
 }

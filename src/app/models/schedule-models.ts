@@ -21,9 +21,10 @@ export interface GroupSchedule {
 // Frontend models
 
 export interface FullLesson extends Lesson {
+    lessonNumber: number;
     group: string;
     color: string;
-    week: 'enumerator' | 'denominator';
+    week: 'Числитель' | 'Знаменатель';
     day: string;
 }
 

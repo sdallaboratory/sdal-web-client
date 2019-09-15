@@ -2,7 +2,7 @@
     Добавление групп
 </h3>
 <mat-form-field mat-list-item>
-    <input #query type="text" matInput>
+    <input #query type="text" matInput (keydown.enter)="addFirst()">
     <!-- <input #query type="text" matInput (ngModelChange)="onChange($event)"> -->
     <button mat-icon-button matSuffix (click)="query.value = ''"
         [style.visibility]="query.value ? 'initial' : 'hidden'">
@@ -11,6 +11,7 @@
     <button mat-icon-button matPrefix>
         <mat-icon>help_outlined</mat-icon>
     </button>
+    <mat-hint *ngIf="(searchResultLength | async) == 1">Нажмите Enter, чтобы добавить</mat-hint>
 </mat-form-field>
 <mat-action-list *ngIf="search.results | async as results; else nothingFound">
     <ng-container *ngIf="results.groups">

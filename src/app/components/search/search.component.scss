@@ -1,3 +1,8 @@
+:host {
+    display: flex;
+    flex-direction: column;
+}
+
 .group {
     text-transform: uppercase;
 }
@@ -6,4 +11,9 @@ mat-list-item:not(:hover) {
     .add-button {
         opacity: 0.2;
     }
+}
+
+mat-form-field {
+    padding: 0 10px;
+    // width: 100%;
 }
