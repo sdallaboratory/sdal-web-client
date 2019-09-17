@@ -43,5 +43,5 @@ export function normalizeText(query: string) {
         }
     }
     const singleSpaced = ruLayout.split(/\s+/).join(' ');
-    return singleSpaced;
+    return singleSpaced.toUpperCase();
 }

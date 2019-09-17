@@ -25,7 +25,8 @@ export class ApiService {
     return this.http.get<Student[]>(`/api/students`, {
       params: {
         query,
-        limit
+        limit,
+        // group: { $exists: true },
       } as any
     });
   }

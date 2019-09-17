@@ -13,7 +13,7 @@ dockerize_angular:
   services:
     - docker:dind
   script:
-    - docker build -t sdal-touch ./dist/touch
+    - docker build -t sdal-touch .
   after_script:
     - docker login --username=$DOCKER_USER --password=$DOCKER_PASSWD
     - docker tag sdal-touch $DOCKER_USER/sdal-touch

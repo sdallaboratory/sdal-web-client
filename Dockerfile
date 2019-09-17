@@ -7,6 +7,6 @@ RUN ng build --prod
 FROM nginx
 
 WORKDIR /app
-COPY --from=build ./ /usr/share/nginx/html
+COPY --from=build ./dist/touch /usr/share/nginx/html
 
 
