@@ -16,7 +16,7 @@ export class FooterComponent {
       width: '100vw',
       maxWidth: '700px',
       panelClass: 'about-modal-pane',
-      maxHeight: '90vh'
+      // maxHeight: '90vh'
     });
 
     // dialogRef.afterClosed().subscribe(result => {
