@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ScheduleService } from './schedule.service';
-import { CombinedDaySchedule, FullLesson, Lesson } from '../models/schedule-models';
+import { CombinedDaySchedule, FullLesson, Lesson, ScheduleTimeSlot } from '../models/schedule-models';
 import { map } from 'rxjs/operators';
 import _ from 'lodash';
 import { Option, ScoredOption } from '../models/recommendations-models';
@@ -24,93 +24,129 @@ export class RecommenderService {
     map(options => options.length ? options : null),
   );
 
-  private buildOptions(daySchedule: CombinedDaySchedule) {
-
-    const byGroups = _.groupBy(_.flatten(daySchedule.timeSlots.map(s => s.groupsLessons)), l => l.group);
-    // const groups = Object.keys(byGroups);
-
-    const freeDayGroups: string[] = [];
-    const militaryDayGroups: string[] = [];
-
-    for (const group in byGroups) {
-      if (byGroups.hasOwnProperty(group)) {
-        const lessons = byGroups[group];
-
-        if (lessons.some(l => !!l.name
-          && (l.name.toLowerCase().includes('военная подготовка')
-            || l.name.includes('ВП')
-            || l.name.includes('В/П')))) {
-          militaryDayGroups.push(group);
-        }
-
-        if (lessons.every(l => !l.name)) {
-          freeDayGroups.push(group);
-        }
-      }
-    }
-
-    const firsts: { [group: string]: FullLesson } = {};
-    const lasts: { [group: string]: FullLesson } = {};
-
-    for (const slot of daySchedule.timeSlots) {
-      for (const lesson of slot.groupsLessons) {
-        const group = lesson.group;
-        if (!lesson.name) {
-          continue; // NOT BREAK
-        }
-        lasts[group] = (lesson);
-        if (!Object.keys(firsts).includes(group)) {
-          firsts[group] = lesson;
-        }
-      }
-    }
-
-    const options = [];
-
-    const lessons = [...Object.values(lasts)];
-
-    const lessonsNumbers = lessons.map(l => l.lessonNumber);
-    const locations = lessons.map(l => ({ ...l, location: l.location && l.location.replace('каф', '') } as Lesson))
-      .filter(l => l.location)
-      .map(l => l.location);
-    // TODO: Handle same 'каф'
-    const sameCampus = locations.length === lessons.length && new Set(locations.map(l => getCampus(l!))).size === 1;
-    const sameClassroom = sameCampus && new Set(locations).size === 1;
-
-    const firstLessonNumber = _.min(lessonsNumbers);
-    const lastLessonNumber = _.min(lessonsNumbers);
-
-    const afterOption: Option = {
-      order: 'after',
-      maxLessonsWait: (lastLessonNumber || 0) - (firstLessonNumber || 0),
-      militaryDayGroups,
-      freeDayGroups,
-      lessons,
-      sameCampus,
-      sameClassroom,
-      peDayGroups: [],
-      firstLessonNumber,
-      lastLessonNumber,
-    };
-
-    return [afterOption] as Option[];
+  private isSlotFree(slot: ScheduleTimeSlot) {
+    return slot.groupsLessons.every(l => !l.name);
   }
+
+  isMilitary(lessonName: string) {
+    const normalized = lessonName.split('/').join('').toLowerCase();
+    return normalized.includes('военная подготовка')
+      || normalized === 'ВП'; 
+      || normalized.includes(''); 
+      || normalized.includes('');
+  }
+
+  private getLessonsBefore() {
+
+  }
+
+
+
+  private buildOptions({ dayName, timeSlots }: CombinedDaySchedule) {
+    const options = [];
+    for (const slot of timeSlots) {
+      if (!this.isSlotFree(slot)) {
+        continue;
+      }
+
+      const flatten = _.flatten(timeSlots.map(s => s.groupsLessons));
+      for (const lesson of flatten) {
+        if (lesson.name)
+      }
+      // const groups = Object.keys(byGroups);
+
+      const option = {
+
+      }
+    }
+  }
+  // private buildOptions(daySchedule: CombinedDaySchedule) {
+
+
+  //   const freeDayGroups: string[] = [];
+  //   const militaryDayGroups: string[] = [];
+  //   const peDayGroups: string[] = [];
+
+  //   for (const group in byGroups) {
+  //     if (byGroups.hasOwnProperty(group)) {
+  //       const lessons = byGroups[group];
+
+  //       if (lessons.some(l => !!l.name
+  //         && (l.name.toLowerCase().includes('военная подготовка')
+  //           || l.name.includes('ВП')
+  //           || l.name.includes('В/П')))) {
+  //         militaryDayGroups.push(group);
+  //       }
+
+  //       if (lessons.every(l => !l.name)) {
+  //         freeDayGroups.push(group);
+  //       }
+  //     }
+  //   }
+
+  //   const firsts: { [group: string]: FullLesson } = {};
+  //   const lasts: { [group: string]: FullLesson } = {};
+
+  //   for (const slot of daySchedule.timeSlots) {
+  //     for (const lesson of slot.groupsLessons) {
+  //       const group = lesson.group;
+  //       if (!lesson.name) {
+  //         continue; // NOT BREAK
+  //       }
+  //       lasts[group] = (lesson);
+  //       if (!Object.keys(firsts).includes(group)) {
+  //         firsts[group] = lesson;
+  //       }
+  //     }
+  //   }
+
+  //   const options = [];
+
+  //   const lessons = [...Object.values(lasts)];
+
+  //   const lessonsNumbers = lessons.map(l => l.lessonNumber);
+  //   const locations = lessons.map(l => ({ ...l, location: l.location && l.location.replace('каф', '') } as Lesson))
+  //     .filter(l => l.location)
+  //     .map(l => l.location);
+  //   // TODO: Handle same 'каф'
+  //   const sameCampus = locations.length === lessons.length && new Set(locations.map(l => getCampus(l!))).size === 1;
+  //   const sameClassroom = sameCampus && new Set(locations).size === 1;
+
+  //   const firstLessonNumber = _.min(lessonsNumbers);
+  //   const lastLessonNumber = _.min(lessonsNumbers);
+
+  //   const afterOption: Option = {
+  //     week: daySchedule.dayName
+  //     type: 'after',
+  //     maxLessonsWait: (lastLessonNumber || 0) - (firstLessonNumber || 0),
+  //     militaryDayGroups,
+  //     freeDayGroups,
+  //     lessons,
+  //     sameCampus,
+  //     sameClassroom,
+  //     peDayGroups: [],
+  //     firstLessonNumber,
+  //     lastLessonNumber,
+  //   };
+
+  //   return [afterOption] as Option[];
+  // }
 
   private scoreOption(option: Option) {
     let score = 0;
 
-    if (option.order === 'after') {
+    if (option.type === 'after') {
       score += 30;
-    } else if (option.order === 'before') {
+    } else if (option.type === 'before') {
       score += 15;
-    } else if (option.order === 'mixed') {
+    } else if (option.type === 'mixed') {
       score += 10;
     }
 
     score -= option.maxLessonsWait * 5;
-    score -= option.militaryDayGroups.length * 5;
-    score -= option.freeDayGroups.length * 10;
-    score -= option.peDayGroups.length * 2;
+    score -= (option.militaryDayGroups || []).length * 5;
+    score -= (option.freeDayGroups || []).length * 10;
+    score -= (option.peDayGroups || []).length * 2;
 
     if (option.sameCampus) {
       score += 5;
@@ -128,11 +164,11 @@ export class RecommenderService {
   public verbalize(option: Option, full?: boolean) {
     const terms: string[] = [];
     terms.push('Встретиться');
-    if (option.order === 'after') {
+    if (option.type === 'after') {
       terms.push('после');
       terms.push(`${option.lastLessonNumber}`);
       terms.push('пары');
-    } else if (option.order === 'before') {
+    } else if (option.type === 'before') {
       terms.push('перед');
       terms.push(`${option.firstLessonNumber}`);
       terms.push('парой');
