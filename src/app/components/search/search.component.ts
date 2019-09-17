@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
-import { merge, fromEvent } from 'rxjs';
-import { map, distinct, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { merge, fromEvent, Subject } from 'rxjs';
+import { map, distinct, distinctUntilChanged, debounceTime, mergeMap, first } from 'rxjs/operators';
 import { SearchService } from 'src/app/services/search.service';
 import { TargetsService } from 'src/app/services/targets.service';
 
@@ -14,10 +14,26 @@ export class SearchComponent implements OnInit, AfterViewInit {
   @ViewChild('query', { static: false })
   private queryElem!: ElementRef<HTMLInputElement>;
 
+  public readonly addFirst = new Subject();
+
+  public clear = new Subject();
+
   constructor(
     public readonly search: SearchService,
     public readonly targets: TargetsService
-  ) { }
+  ) {
+    this.addFirst.pipe(
+      mergeMap(() => search.results.pipe(first())),
+    ).subscribe(({ students, groups }) => {
+      console.log('GO');
+
+      if (groups && groups.length) {
+        this.targets.addGroup(groups[0]);
+      } else if (students && students.length) {
+        this.targets.addStudent(students[0]);
+      }
+    })
+  }
 
   public searchResultLength = this.search.results.pipe(
     map(({ groups, students }) => (groups && groups.length || 0) + (students && students.length || 0)),
@@ -29,7 +45,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     const input = this.queryElem.nativeElement;
     // Emit on clear
-    merge(fromEvent(input, 'input'), fromEvent(input, 'change')).pipe(
+    merge(fromEvent(input, 'input'), fromEvent(input, 'change'), this.clear).pipe(
       map(() => input.value),
       distinctUntilChanged(),
       debounceTime(200),
@@ -41,8 +57,5 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.targets.addGroup(group);
   }
 
-  public addFirst() {
-    // this.targets.addGroup()
-  }
 
 }

@@ -1,2 +1,9 @@
 <p>recommendations works!</p>
-<!-- {{recommender.recommendations | async | json}}  -->
+<ul>
+    <li *ngFor="let option of recommender.options| async"
+        [style.color]="'rgb(' + (250 - option.score * 5) +','+ option.score*5 +',0)'">
+        {{option.score}}
+        {{option | option}}
+        <hr>
+    </li>
+</ul>

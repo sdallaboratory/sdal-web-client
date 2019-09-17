@@ -20,7 +20,6 @@ export class ScheduleService {
     targets.targetsObservable.pipe(
       filter(ts => !ts || this.selectedLesson.value && !ts.map(t => t.group).includes(this.selectedLesson.value.group) || false)
     ).subscribe(() => this.selectedLesson.next(null));
-    console.log(pipe);
   }
 
   public readonly combinedSchedule = this.targets.targetsObservable.pipe(
@@ -59,7 +58,6 @@ export class ScheduleService {
         } as FullLesson)),
       ]))
     );
-    console.log(flatLessons);
     return flatLessons;
   }
 
@@ -75,7 +73,6 @@ export class ScheduleService {
         } as ScheduleTimeSlot)),
       } as CombinedDaySchedule)),
     } as CombinedWeekSchedule));
-    console.log(schedule);
 
     return schedule;
   }

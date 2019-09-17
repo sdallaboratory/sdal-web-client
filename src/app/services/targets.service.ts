@@ -5,6 +5,7 @@ import { ApiService } from './api.service';
 import _ from 'lodash';
 import { map } from 'rxjs/operators';
 import { StorageService } from './storage.service';
+import { Student } from '../models/student';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,10 +15,10 @@ export class TargetsService {
     private readonly api: ApiService,
     private readonly storage: StorageService
   ) {
-    const groups = this.storage.getGroups();
-    if (groups) {
-      for (const group of groups) {
-        this.addGroup(group);
+    const targets = this.storage.getTargets();
+    if (targets) {
+      for (const target of targets) {
+        this.addGroup(target.group, target.students);
       }
     }
   }
@@ -30,7 +31,30 @@ export class TargetsService {
     map(targets => targets.length ? targets : null),
   );
 
-  public addGroup(group: string) {
+  public readonly targetsStudents = this.targetsSubject.asObservable().pipe(
+    map(targets => _.flatten(targets.map(t => t.students || []))),
+    map(students => students.length ? students : null),
+  );
+
+  public addStudent(student: Student) {
+    // TODO: Implement as needed
+    const target = this.targetsSubject.value.find(t => t.group === student.group);
+    if (target) {
+      if (!target.students) {
+        target.students = [student];
+      } else {
+        target.students.push(student);
+      }
+      this.targetsSubject.next(this.targets);
+      this.storage.saveTargets(this.targets);
+    } else {
+      this.addGroup(student.group, [student]);
+    }
+    console.log(this.targetsSubject.value);
+
+  }
+
+  public addGroup(group: string, students?: Student[]) {
     const existedTarget = this.targets.find(t => t.group === group);
     if (existedTarget) {
       return existedTarget;
@@ -40,9 +64,10 @@ export class TargetsService {
 
     const target: Target = {
       group,
-      color: '#adffda',
+      color: '#000000dd',
       schedulePromise,
       scheduleLoaded: false,
+      students
     };
 
     schedulePromise.then((d) => {

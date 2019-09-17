@@ -7,7 +7,8 @@ import {
   MatToolbarModule,
   MatListModule,
   MatIconModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatChipsModule
 } from '@angular/material';
 
 const imports = [
@@ -18,7 +19,8 @@ const imports = [
   MatToolbarModule,
   MatListModule,
   MatIconModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatChipsModule
 ];
 
 @NgModule({

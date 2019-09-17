@@ -18,6 +18,8 @@ import { LessonTooltipPipe } from './pipes/lesson-tooltip.pipe';
 import { LessonDetailsComponent } from './components/lesson-details/lesson-details.component';
 import { RecommendationsComponent } from './components/recommendations/recommendations.component';
 import { LessonNumberPipe } from './pipes/lesson-number.pipe';
+import { OptionPipe } from './pipes/option.pipe';
+import { HasSchedulePipe } from './pipes/has-schedule.pipe';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { LessonNumberPipe } from './pipes/lesson-number.pipe';
     LessonTooltipPipe,
     LessonDetailsComponent,
     RecommendationsComponent,
-    LessonNumberPipe
+    LessonNumberPipe,
+    OptionPipe,
+    HasSchedulePipe
   ],
   imports: [
     BrowserModule,

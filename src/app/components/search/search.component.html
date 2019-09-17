@@ -2,9 +2,13 @@
     Добавление групп
 </h3>
 <mat-form-field mat-list-item>
-    <input #query type="text" matInput (keydown.enter)="addFirst()">
-    <!-- <input #query type="text" matInput (ngModelChange)="onChange($event)"> -->
-    <button mat-icon-button matSuffix (click)="query.value = ''"
+    <button color="primary" mat-raised-button matSuffix (click)="addFirst.next(); query.value = ''"
+        *ngIf="(searchResultLength | async) == 1">
+        <mat-icon>add</mat-icon> Добавить
+    </button>
+    <input autofocus #query type="text" matInput (keydown.enter)="addFirst.next()"
+        placeholder="Введите группу или студента...">
+    <button mat-icon-button matSuffix (click)="query.value = ''; clear.next()"
         [style.visibility]="query.value ? 'initial' : 'hidden'">
         <mat-icon>clear</mat-icon>
     </button>
@@ -28,9 +32,14 @@
     <ng-container *ngIf="results.students">
         <h3 mat-subheader>Студенты</h3>
         <mat-list-item *ngFor="let student of results.students">
-            <mat-icon mat-list-icon>person</mat-icon>
+            <img mat-list-icon [src]="student.avatar" *ngIf="student.avatar" style="transform: scale(1.7)">
+            <mat-icon mat-list-icon *ngIf="!student.avatar">person</mat-icon>
             <h4 mat-line>{{student.name}}</h4>
             <p mat-line class="group"> {{student.group}}</p>
+            <button class="add-button" mat-icon-button (click)="targets.addStudent(student)"
+                *ngIf="student.group | hasSchedule">
+                <mat-icon>add_circle_outlined</mat-icon>
+            </button>
         </mat-list-item>
     </ng-container>
 </mat-action-list>

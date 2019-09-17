@@ -6,6 +6,5 @@ export function getCampus(classroom: string): string | null {
     }
 
     const letter = normalized.replace(/.*\d+/, '');
-    console.log(letter);
-    return null;
+    return letter;
 }

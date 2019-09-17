@@ -1,13 +1,13 @@
 import { Injectable, ChangeDetectorRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ResponsiveService {
 
-  public readonly mobile = new Subject<boolean>();
+  public readonly mobile = new BehaviorSubject<boolean>(false);
 
   // ngOnDestroy(): void {
   //   this.mobileQuery.removeListener(this.mobileQueryListener);

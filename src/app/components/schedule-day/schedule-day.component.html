@@ -5,7 +5,8 @@
         <div class="groups-lessons">
             <ng-container *ngFor="let lesson of slot.groupsLessons">
                 <div *ngIf="lesson.name; else empty" [style.background]="lesson.color"
-                    [matTooltip]="lesson | lessonTooltip" class="group-lesson" (click)="selectLesson(lesson)">
+                    [matTooltip]="lesson | lessonTooltip" class="group-lesson"
+                    (mousedown)="selectLesson(lesson, $event)">
                     <ng-container *ngIf="slot.groupsLessons.length <= 2">
                         {{lesson.name}}
                     </ng-container> {{lesson.location}}

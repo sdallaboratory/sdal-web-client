@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   backendOrigin: 'http://95.216.188.201:3000',
+  // backendOrigin: 'http://localhost:3000',
 };
 
 /*

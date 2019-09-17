@@ -19,8 +19,10 @@ export class ScheduleDayComponent implements OnInit {
   ngOnInit() {
   }
 
-  public selectLesson(lesson: FullLesson) {
-    this.schedule.selectedLesson.next(lesson);
+  public selectLesson(lesson: FullLesson, event: MouseEvent) {
+    if (event.buttons) {
+      this.schedule.selectedLesson.next(lesson);
+    }
   }
 
 }

@@ -3,14 +3,29 @@
         Добавленные группы
     </h3>
     <mat-list>
-        <mat-list-item *ngFor="let target of targetsList">
-            <mat-icon mat-list-icon [style.color]="target.color ">{{target.scheduleLoaded ? 'group' : 'all_out'}}
-            </mat-icon>
-            <h4 mat-line class="group">{{target.group}}</h4>
-            <button class="add-button" mat-icon-button (click)="targets.removeGroup(target.group)">
-                <mat-icon>clear</mat-icon>
-            </button>
-        </mat-list-item>
+        <ng-container *ngFor="let target of targetsList">
+            <mat-list-item *ngIf="target.students && target.students.length == 1 && target.students[0] as student;">
+                <img mat-list-icon [src]="student.avatar" *ngIf="student.avatar" style="transform: scale(1.7)">
+                <mat-icon mat-list-icon *ngIf="!student.avatar">person</mat-icon>
+                <h4 mat-line>{{student.name}}</h4>
+                <p mat-line class="group"> {{student.group}}</p>
+                <button class="add-button" mat-icon-button (click)="targets.removeGroup(target.group)">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-list-item>
+            <mat-list-item *ngIf="!target.students || target.students.length !== 1">
+                <mat-icon mat-list-icon [style.color]="target.color">{{target.scheduleLoaded ? 'group' : 'all_out'}}
+                </mat-icon>
+                <h4 mat-line class="group">{{target.group}}</h4>
+                <span mat-line *ngIf="target.students as students">
+                    ({{students[0].name}}<ng-container *ngIf="students.length > 1">
+                        и ещё {{students.length - 1}}</ng-container>)
+                </span>
+                <button class="add-button" mat-icon-button (click)="targets.removeGroup(target.group)">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-list-item>
+        </ng-container>
     </mat-list>
 </ng-container>
 <ng-template #noTargets>

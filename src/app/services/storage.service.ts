@@ -12,18 +12,21 @@ export class StorageService {
   ) { }
 
   private readonly targetsKey = 'targets';
+  private readonly groupsKey = 'groups';
 
-  public getGroups() {
-    const targets = this.getTargets();
-    return targets && targets.map(t => t.group);
-  }
+  // public getTargetedGroups() {
+  //   const targets = this.getTargets();
+  //   return targets && targets.map(t => t.group);
+  // }
 
   public getTargets() {
     const stringifiedTargets = localStorage.getItem(this.targetsKey);
     if (!stringifiedTargets) {
       return null;
     }
+
     const storedTargets = JSON.parse(stringifiedTargets) as StoredTarget[];
+    console.log(storedTargets);
     return storedTargets;
     // TODO: Restore targets or whatever...
     // const targets = storedTargets.map(t => {...t, })
@@ -33,5 +36,20 @@ export class StorageService {
     const storingTargets: StoredTarget[] = targets.map(({ group, students, color }) => ({ group, students, color }));
     const stringifiedTargets = JSON.stringify(storingTargets);
     localStorage.setItem(this.targetsKey, stringifiedTargets);
+  }
+
+  public saveGroups(groups: string[]) {
+    const stringified = JSON.stringify(groups);
+    localStorage.setItem(this.groupsKey, stringified);
+  }
+
+
+  public getGroups() {
+    const stringified = localStorage.getItem(this.groupsKey);
+    if (!stringified) {
+      return null;
+    }
+    const groups = JSON.parse(stringified) as string[];
+    return groups;
   }
 }

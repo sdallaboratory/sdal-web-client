@@ -1,26 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Subject, of, merge } from 'rxjs';
+import { Subject, of, merge, BehaviorSubject } from 'rxjs';
 import { normalizeText } from '../utils/normalize-query';
-import { map, mergeMap, filter, combineLatest, catchError } from 'rxjs/operators';
+import { map, mergeMap, filter, combineLatest, catchError, tap, startWith } from 'rxjs/operators';
 import { combineLatest as combineLatestStatic } from 'rxjs';
 import { GroupsService } from './groups.service';
 import { TargetsService } from './targets.service';
 import { ApiService } from './api.service';
 import _ from 'lodash';
 import { Student } from '../models/student';
+import { compareStudents } from '../utils/compare-students';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService {
 
-  public readonly query = new Subject<string>();
+  public readonly query = new BehaviorSubject<string>('');
 
   // private change = merge(this.query, this.targets.targetsObservable);
 
   public readonly groups = this.query.pipe(
     map(normalizeText),
-    map(q => ([...this.groupsService.normalizedNames].filter(g => g.includes(q)))),
+    map(q => ([...this.groupsService.names].filter(g => g.includes(q)))),
     combineLatest(this.targets.targetsObservable), // TODO: Check this
     map(([groups, targets]) => groups.filter(g => !targets || !targets.map(t => t.group).includes(g))),
     map(groups => _.take(groups, 8)),
@@ -31,6 +32,8 @@ export class SearchService {
   public readonly students = this.query.pipe(
     map(normalizeText),
     mergeMap(q => !q ? of<Student[]>([]) : this.api.searchStudents(q, 8)),
+    combineLatest(this.targets.targetsStudents.pipe(startWith([]))),
+    map(([students, targetedStudents]) => students.filter(s => !_.find(targetedStudents || [], ts => compareStudents(s, ts)))),
     catchError(() => of<Student[]>([])),
     map(students => students.length ? students : null),
   );

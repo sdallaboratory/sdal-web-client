@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ScheduleService } from './schedule.service';
-import { CombinedDaySchedule, FullLesson } from '../models/schedule-models';
+import { CombinedDaySchedule, FullLesson, Lesson } from '../models/schedule-models';
 import { map } from 'rxjs/operators';
 import _ from 'lodash';
 import { Option, ScoredOption } from '../models/recommendations-models';
@@ -15,16 +15,17 @@ export class RecommenderService {
     private readonly schedule: ScheduleService
   ) { }
 
-  public readonly recommendations = this.schedule.combinedSchedule.pipe(
+  public readonly options = this.schedule.combinedSchedule.pipe(
     map(s => _.flatten(s.map(d => d.days))),
     map(days => _.flatten(days.map(this.buildOptions))),
     map(options => options.map(o => this.scoreOption(o))),
+    map(options => _.orderBy(options, o => -o.score)),
   );
 
   private buildOptions(daySchedule: CombinedDaySchedule) {
 
     const byGroups = _.groupBy(_.flatten(daySchedule.timeSlots.map(s => s.groupsLessons)), l => l.group);
-    const groups = Object.keys(byGroups);
+    // const groups = Object.keys(byGroups);
 
     const freeDayGroups: string[] = [];
     const militaryDayGroups: string[] = [];
@@ -33,9 +34,12 @@ export class RecommenderService {
       if (byGroups.hasOwnProperty(group)) {
         const lessons = byGroups[group];
 
+
+
         if (lessons.some(l => !!l.name
           && (l.name.toLowerCase().includes('военная подготовка')
-            || l.name.includes('ВП')))) {
+            || l.name.includes('ВП')
+            || l.name.includes('В/П')))) {
           militaryDayGroups.push(group);
         }
 
@@ -52,7 +56,7 @@ export class RecommenderService {
       for (const lesson of slot.groupsLessons) {
         const group = lesson.group;
         if (!lesson.name) {
-          break;
+          continue; // NOT BREAK
         }
         lasts[group] = (lesson);
         if (!Object.keys(firsts).includes(group)) {
@@ -64,13 +68,15 @@ export class RecommenderService {
     const options = [];
 
     const lessons = [...Object.values(lasts)];
+
     const lessonsNumbers = lessons.map(l => l.lessonNumber);
-    const locations = lessons.filter(l => l.location).map(l => l.location);
+    const locations = lessons.map(l => ({ ...l, location: l.location && l.location.replace('каф', '') } as Lesson))
+      .filter(l => l.location)
+      .map(l => l.location);
     // TODO: Handle same 'каф'
     const sameCampus = locations.length === lessons.length && new Set(locations.map(l => getCampus(l!))).size === 1;
     const sameClassroom = sameCampus && new Set(locations).size === 1;
 
-    // console.log(lessonsNumbers);
     const firstLessonNumber = _.min(lessonsNumbers);
     const lastLessonNumber = _.min(lessonsNumbers);
 
@@ -117,5 +123,28 @@ export class RecommenderService {
 
     const scored: ScoredOption = { ...option, score };
     return scored;
+  }
+
+  public verbalize(option: Option, full?: boolean) {
+    const terms: string[] = [];
+    terms.push('Встретиться');
+    if (option.order === 'after') {
+      terms.push('после');
+      terms.push(`${option.lastLessonNumber}`);
+      terms.push('пары');
+    } else if (option.order === 'before') {
+      terms.push('перед');
+      terms.push(`${option.firstLessonNumber}`);
+      terms.push('парой');
+    }
+    const lesson = option.lessons[0];
+    if (lesson) {
+      terms.push('в');
+      terms.push(`${lesson.day}`);
+      terms.push('на');
+      terms.push(`${lesson.week.toLocaleLowerCase().replace('ь', 'е')}`);
+      terms.push('.');
+    }
+    return terms.join(' ');
   }
 }
