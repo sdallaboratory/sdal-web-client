@@ -6,22 +6,21 @@
         *ngIf="(searchResultLength | async) == 1">
         <mat-icon>add</mat-icon> Добавить
     </button>
-    <input autofocus #query type="text" matInput (keydown.enter)="addFirst.next()"
-        placeholder="Введите группу или студента...">
+    <input #query type="text" matInput (keydown.enter)="addFirst.next()" placeholder="Введите группу или студента...">
     <button mat-icon-button matSuffix (click)="query.value = ''; clear.next()"
         [style.visibility]="query.value ? 'initial' : 'hidden'">
         <mat-icon>clear</mat-icon>
     </button>
-    <button mat-icon-button matPrefix>
+    <!-- <button mat-icon-button matPrefix>
         <mat-icon>help_outlined</mat-icon>
-    </button>
+    </button> -->
     <mat-hint *ngIf="(searchResultLength | async) == 1">Нажмите Enter, чтобы добавить</mat-hint>
 </mat-form-field>
 <mat-action-list *ngIf="search.results | async as results; else nothingFound">
     <ng-container *ngIf="results.groups">
         <h3 mat-subheader>Группы</h3>
         <mat-list-item *ngFor="let group of results.groups">
-            <mat-icon mat-list-icon>people_alt</mat-icon>
+            <mat-icon mat-list-icon>supervised_user_circle</mat-icon>
             <h4 mat-line class="group">{{group}}</h4>
             <button class="add-button" mat-icon-button (click)="addGroup(group)">
                 <mat-icon>add_circle_outlined</mat-icon>
@@ -46,7 +45,6 @@
 <ng-template #nothingFound>
     <p>
         По вашему запросу ничего не найдено. Скорее всего, расписание искомой группы или студента отсутсвует в
-        электоронном
-        университете.
+        электоронном университете.
     </p>
 </ng-template>

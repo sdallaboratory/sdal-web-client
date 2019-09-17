@@ -8,7 +8,10 @@ import {
   MatListModule,
   MatIconModule,
   MatTooltipModule,
-  MatChipsModule
+  MatChipsModule,
+  MatSlideToggleModule,
+  MatMenuModule,
+  MatDialogModule
 } from '@angular/material';
 
 const imports = [
@@ -20,7 +23,9 @@ const imports = [
   MatListModule,
   MatIconModule,
   MatTooltipModule,
-  MatChipsModule
+  MatChipsModule,
+  MatSlideToggleModule,
+  MatDialogModule
 ];
 
 @NgModule({

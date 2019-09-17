@@ -1,25 +1,18 @@
 <mat-sidenav-container class="example-sidenav-container">
 
     <mat-sidenav #snav [mode]="(responsive.mobile | async) ? 'over' : 'side'" opened>
-        <button mat-mini-fab (click)="snav.toggle()" class="close-button">
-            <mat-icon>chevron_left</mat-icon>
-        </button>
-        <h1 mat-header>
-            <span mat-line>SDAL Touch</span>
-        </h1>
-        <sdal-targets></sdal-targets>
-        <sdal-search></sdal-search>
-        <footer class="footer">
-            <p>
-                <label>
-                    &copy; SDAL 2019
-                </label>
-                <button mat-raised-button color="primary">
-                    Что с этим делать
-                    <mat-icon>help_outlined</mat-icon>
-                </button>
-            </p>
-        </footer>
+        <div class="scroll-box">
+            <button mat-mini-fab (click)="snav.toggle()" class="close-button">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+            <h1 mat-header>
+                <span mat-line>SDAL Touch</span>
+            </h1>
+            <sdal-targets></sdal-targets>
+            <sdal-search></sdal-search>
+            <sdal-footer>
+            </sdal-footer>
+        </div>
     </mat-sidenav>
 
     <mat-sidenav-content>
@@ -31,7 +24,10 @@
         <div class="scroll-box">
             <sdal-recommendations></sdal-recommendations>
             <sdal-schedule-table></sdal-schedule-table>
+            <div style="position: sticky; bottom: 0; position:-webkit-sticky; z-index: 150">
+                <sdal-lesson-details style="user-select: none; touch-action: none;" draggable="false">
+                </sdal-lesson-details>
+            </div>
         </div>
-        <sdal-lesson-details style="user-select: none; touch-action: none;" draggable="false"></sdal-lesson-details>
     </mat-sidenav-content>
 </mat-sidenav-container>

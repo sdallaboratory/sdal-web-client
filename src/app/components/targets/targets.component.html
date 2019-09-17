@@ -5,8 +5,12 @@
     <mat-list>
         <ng-container *ngFor="let target of targetsList">
             <mat-list-item *ngIf="target.students && target.students.length == 1 && target.students[0] as student;">
-                <img mat-list-icon [src]="student.avatar" *ngIf="student.avatar" style="transform: scale(1.7)">
-                <mat-icon mat-list-icon *ngIf="!student.avatar">person</mat-icon>
+                <mat-icon mat-list-icon *ngIf="!target.scheduleLoaded">all_out</mat-icon>
+                <img mat-list-icon [src]="student.avatar" *ngIf="target.scheduleLoaded && student.avatar"
+                    style="transform: scale(1.7)">
+                <mat-icon mat-list-icon *ngIf="target.scheduleLoaded && !student.avatar" style="transform: scale(1.7)">
+                    account_circle</mat-icon>
+
                 <h4 mat-line>{{student.name}}</h4>
                 <p mat-line class="group"> {{student.group}}</p>
                 <button class="add-button" mat-icon-button (click)="targets.removeGroup(target.group)">
@@ -14,7 +18,8 @@
                 </button>
             </mat-list-item>
             <mat-list-item *ngIf="!target.students || target.students.length !== 1">
-                <mat-icon mat-list-icon [style.color]="target.color">{{target.scheduleLoaded ? 'group' : 'all_out'}}
+                <mat-icon mat-list-icon [style.color]="target.color" style="transform: scale(1.7)">
+                    {{target.scheduleLoaded ? 'supervised_user_circle' : 'all_out'}}
                 </mat-icon>
                 <h4 mat-line class="group">{{target.group}}</h4>
                 <span mat-line *ngIf="target.students as students">
@@ -29,5 +34,5 @@
     </mat-list>
 </ng-container>
 <ng-template #noTargets>
-    <p>Добавтьте хотя бы одну группу, чтобы посмотреть расписание</p>
+    <p>Добавтьте несколько групп, чтобы сравнить расписание</p>
 </ng-template>

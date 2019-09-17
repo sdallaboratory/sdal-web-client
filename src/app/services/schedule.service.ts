@@ -74,6 +74,6 @@ export class ScheduleService {
       } as CombinedDaySchedule)),
     } as CombinedWeekSchedule));
 
-    return schedule;
+    return schedule.length ? schedule : null;
   }
 }

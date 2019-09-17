@@ -16,10 +16,12 @@ export class RecommenderService {
   ) { }
 
   public readonly options = this.schedule.combinedSchedule.pipe(
+    map(s => s || []),
     map(s => _.flatten(s.map(d => d.days))),
     map(days => _.flatten(days.map(this.buildOptions))),
     map(options => options.map(o => this.scoreOption(o))),
     map(options => _.orderBy(options, o => -o.score)),
+    map(options => options.length ? options : null),
   );
 
   private buildOptions(daySchedule: CombinedDaySchedule) {
@@ -33,8 +35,6 @@ export class RecommenderService {
     for (const group in byGroups) {
       if (byGroups.hasOwnProperty(group)) {
         const lessons = byGroups[group];
-
-
 
         if (lessons.some(l => !!l.name
           && (l.name.toLowerCase().includes('военная подготовка')

@@ -20,6 +20,9 @@ import { RecommendationsComponent } from './components/recommendations/recommend
 import { LessonNumberPipe } from './pipes/lesson-number.pipe';
 import { OptionPipe } from './pipes/option.pipe';
 import { HasSchedulePipe } from './pipes/has-schedule.pipe';
+import { ScoreIconPipe } from './pipes/score-icon.pipe';
+import { FooterComponent } from './components/footer/footer.component';
+import { AboutModalComponent } from './components/about-modal/about-modal.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,10 @@ import { HasSchedulePipe } from './pipes/has-schedule.pipe';
     RecommendationsComponent,
     LessonNumberPipe,
     OptionPipe,
-    HasSchedulePipe
+    HasSchedulePipe,
+    ScoreIconPipe,
+    FooterComponent,
+    AboutModalComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +60,7 @@ import { HasSchedulePipe } from './pipes/has-schedule.pipe';
     },
     LessonNumberPipe
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [AboutModalComponent]
 })
 export class AppModule { }

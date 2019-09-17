@@ -48,7 +48,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     merge(fromEvent(input, 'input'), fromEvent(input, 'change'), this.clear).pipe(
       map(() => input.value),
       distinctUntilChanged(),
-      debounceTime(200),
+      debounceTime(400),
       // map()
     ).subscribe(q => this.search.query.next(q));
   }

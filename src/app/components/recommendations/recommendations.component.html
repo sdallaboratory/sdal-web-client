@@ -1,9 +1,17 @@
-<p>recommendations works!</p>
-<ul>
-    <li *ngFor="let option of recommender.options| async"
-        [style.color]="'rgb(' + (250 - option.score * 5) +','+ option.score*5 +',0)'">
-        {{option.score}}
-        {{option | option}}
-        <hr>
-    </li>
-</ul>
+<div class="wrapper" *ngIf="recommender.options | async as options">
+    <h3 mat-subheader>Рекомендации</h3>
+    <mat-list>
+        <ng-container *ngFor="let option of options; index as i">
+            <mat-list-item *ngIf="full || i < 3">
+                <!-- [style.color]="'rgb(' + (250 - option.score * 5) +','+ option.score*5 +',0)'" -->
+                <mat-icon>{{option.score | scoreIcon}}</mat-icon>
+                <!-- {{option.score}} -->
+                {{option | option : false}}
+                <br>
+            </mat-list-item>
+        </ng-container>
+    </mat-list>
+    <p>
+        <mat-slide-toggle [(ngModel)]="full">Подробные рекомендации</mat-slide-toggle>
+    </p>
+</div>

@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit {
     this.mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this.mobileQueryListener);
     this.mobileQuery.addListener((event) => this.responsive.mobile.next(event.matches));
+    this.responsive.mobile.next(this.mobileQuery.matches);
   }
 
   ngOnInit() {
