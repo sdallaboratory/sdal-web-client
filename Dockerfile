@@ -2,6 +2,7 @@ FROM trion/ng-cli as build
 
 WORKDIR /app
 COPY . .
+RUN npm install
 RUN ng build --prod
 
 FROM nginx
