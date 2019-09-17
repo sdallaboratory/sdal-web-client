@@ -1,18 +1,26 @@
-<mat-card *ngIf="schedule.selectedLesson | async as lesson">
-    <mat-card-header>
-        <mat-icon mat-card-avatar>class</mat-icon>
-        <mat-card-title>{{lesson.name}}</mat-card-title>
-        <mat-card-subtitle>{{lesson.teacher}}</mat-card-subtitle>
-        <button mat-icon-button (click)="schedule.selectedLesson.next(null)">
-            <mat-icon>clear</mat-icon>
-        </button>
-    </mat-card-header>
-    <mat-card-content>
-        <div>{{lesson.group}}</div>
-        <div>{{lesson.week}}</div>
-        <div>{{lesson.day}}</div>
-        <div>{{lesson.type}}</div>
-        <div>{{lesson.timeRange}}</div>
-        <div>{{lesson.location}}</div>
-    </mat-card-content>
+<mat-card *ngIf="schedule.selectedLesson | async as lesson" [style.background]="lesson.color">
+    <div>
+
+        <mat-card-header>
+            <mat-icon mat-card-avatar>class</mat-icon>
+            <span>
+
+                <mat-card-title>{{lesson.name}} {{lesson.type}}</mat-card-title>
+                <mat-card-subtitle>{{lesson.teacher}}</mat-card-subtitle>
+            </span>
+            <button mat-icon-button (click)="schedule.selectedLesson.next(null)">
+                <mat-icon>clear</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content>
+            <div>
+                <mat-icon>calendar</mat-icon>{{lesson.week}}, {{lesson.day}}{{lesson.timeRange}}
+            </div>
+            <div>{{lesson.group}}</div>
+            <div></div>
+            <div>
+                <mat-icon>my_location</mat-icon> {{lesson.location}}
+            </div>
+        </mat-card-content>
+    </div>
 </mat-card>
