@@ -26,7 +26,6 @@ export class TelemetryService {
   }
 
   private createTargetsTelemetry(targets: Target[]) {
-    console.log(this.session);
     const timestamp = new Date().getTime();
     return {
       sessionId: this.session.guid,

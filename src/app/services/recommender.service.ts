@@ -18,7 +18,7 @@ export class RecommenderService {
   public readonly options = this.schedule.combinedSchedule.pipe(
     map(s => s || []),
     map(s => _.flatten(s.map(d => d.days))),
-    map(days => _.flatten(days.map(this.buildOptions))),
+    map(days => _.flatten(days.map(this.buildOptions.bind(this)))),
     map(options => options.map(o => this.scoreOption(o))),
     map(options => _.orderBy(options, o => -o.score)),
     map(options => options.length ? options : null),
@@ -31,9 +31,15 @@ export class RecommenderService {
   isMilitary(lessonName: string) {
     const normalized = lessonName.split('/').join('').toLowerCase();
     return normalized.includes('военная подготовка')
-      || normalized === 'ВП'; 
-      || normalized.includes(''); 
-      || normalized.includes('');
+      || normalized === 'вп';
+  }
+
+  isPe(lessonName: string) {
+    const normalized = lessonName.split('/').join('').toLowerCase();
+    return normalized.includes('физкультура')
+      || normalized === 'спорт'
+      || normalized === 'валеология'
+      || normalized === 'физическая культура'
   }
 
   private getLessonsBefore() {
@@ -43,22 +49,52 @@ export class RecommenderService {
 
 
   private buildOptions({ dayName, timeSlots }: CombinedDaySchedule) {
-    const options = [];
-    for (const slot of timeSlots) {
-      if (!this.isSlotFree(slot)) {
+    const options: Option[] = [];
+
+    for (const slotToTest of timeSlots) {
+      if (!this.isSlotFree(slotToTest)) {
         continue;
       }
 
+      const { week, day, timeRange, lessonNumber } = slotToTest.groupsLessons[0];
+
       const flatten = _.flatten(timeSlots.map(s => s.groupsLessons));
-      for (const lesson of flatten) {
-        if (lesson.name)
+
+      const militaryDayGroups: string[] = [];
+      const peDayGroups: string[] = [];
+      for (const { name, group } of flatten) {
+        if (!name) {
+          continue;
+        }
+        if (this.isMilitary(name) && militaryDayGroups.includes(group)) {
+          militaryDayGroups.push(group);
+        }
+        if (this.isPe(name) && militaryDayGroups.includes(group)) {
+          peDayGroups.push(group);
+        }
       }
-      // const groups = Object.keys(byGroups);
+
+      const freeDayGroups: string[] = [];
+
+      // const lessonsBefore: FullLesson[] = [];
+      const lessonsAfter: FullLesson[] = [];
+
+      const lessonsBefore = flatten.filter(l => l.name).filter(l => l.lessonNumber < lessonNumber);
+
+      for (const slot of timeSlots) {
+        for (const lesson of slot.groupsLessons) {
+          // if 
+        }
+      }
 
       const option = {
 
-      }
+      } as Option;
+
+      // options.push(option);
     }
+
+    return options;
   }
   // private buildOptions(daySchedule: CombinedDaySchedule) {
 

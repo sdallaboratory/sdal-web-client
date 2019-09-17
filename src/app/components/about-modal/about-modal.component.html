@@ -22,12 +22,12 @@
 <h3 mat-subheader>Фидбек</h3>
 <p>Не всё понятно? Знаете, как сделать приложение лучше? Хотит поучаствовать в разработке?</p>
 <mat-form-field>
-    <textarea [disabled]="sent" matInput cols="30" rows="5" placeholder="Оставь комментарий"
+    <textarea #textarea [disabled]="sent" matInput cols="30" rows="5" placeholder="Оставь комментарий"
         [(ngModel)]="comment"></textarea>
 </mat-form-field>
 <button [disabled]="!comment" *ngIf="!sent" class="raised" mat-raised-button color="primary" (click)="send()">
     <mat-icon>send</mat-icon>&nbsp;Отправить
 </button>
-<button *ngIf="sent" class="raised" mat-raised-button color="primary" (click)="sent = false">
-    <mat-icon>send</mat-icon>&nbsp;Хочу написать ещё
+<button *ngIf="sent" class="raised" mat-raised-button color="primary" (click)="sent = false; textarea.focus()">
+    <mat-icon>accessibility_new</mat-icon>&nbsp;Хочу написать ещё
 </button>

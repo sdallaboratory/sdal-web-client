@@ -46,12 +46,10 @@ export class TargetsService {
         target.students.push(student);
       }
       this.targetsSubject.next(this.targets);
-      this.storage.saveTargets(this.targets);
+      this.storage.setTargets(this.targets);
     } else {
       this.addGroup(student.group, [student]);
     }
-    console.log(this.targetsSubject.value);
-
   }
 
   public addGroup(group: string, students?: Student[]) {
@@ -72,12 +70,13 @@ export class TargetsService {
 
     schedulePromise.then((d) => {
       target.scheduleLoaded = true;
-      console.log(d);
     });
 
     this.targets.push(target);
     this.targetsSubject.next(this.targets);
-    this.storage.saveTargets(this.targets);
+    console.log(this.storage);
+
+    this.storage.setTargets(this.targets);
 
     return target;
   }
@@ -86,14 +85,14 @@ export class TargetsService {
     const target = this.targets.find(t => t.group === group);
     _.remove(this.targets, target);
     this.targetsSubject.next(this.targets);
-    this.storage.saveTargets(this.targets);
+    this.storage.setTargets(this.targets);
     return target;
   }
 
   public clear() {
     this.targets = [];
     this.targetsSubject.next(this.targets);
-    this.storage.saveTargets(this.targets);
+    this.storage.setTargets(this.targets);
   }
 
 }

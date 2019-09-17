@@ -17,8 +17,6 @@ export class SessionService {
     }
     this.guid = guid;
 
-    console.log(this.guid);
-
     let milliseconds: string | number | null = sessionStorage.getItem('sessionMs');
     if (!milliseconds) {
       milliseconds = new Date().getTime();

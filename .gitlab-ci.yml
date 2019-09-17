@@ -31,4 +31,4 @@ deploy:
   script:
     - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker pull almosvirog/sdal-touch
     - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker rm -f sdal-touch || true
-    - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker run -d -p 80:80 --name sdal-touch almosvirog/sdal-touch
+    - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker run -d -p 1111:80 --name sdal-touch almosvirog/sdal-touch

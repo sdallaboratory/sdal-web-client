@@ -13,43 +13,40 @@ export class StorageService {
 
   private readonly targetsKey = 'targets';
   private readonly groupsKey = 'groups';
+  private readonly userKey = 'user';
 
-  // public getTargetedGroups() {
-  //   const targets = this.getTargets();
-  //   return targets && targets.map(t => t.group);
-  // }
+  private set<T>(key: string, obj: T) {
+    const stringified = JSON.stringify(obj);
+    localStorage.setItem(key, stringified);
+  }
+
+  private get<T>(key: string) {
+    const stringified = localStorage.getItem(key);
+    return stringified && JSON.parse(stringified) as T || null;
+  }
 
   public getTargets() {
-    const stringifiedTargets = localStorage.getItem(this.targetsKey);
-    if (!stringifiedTargets) {
-      return null;
-    }
-
-    const storedTargets = JSON.parse(stringifiedTargets) as StoredTarget[];
-    console.log(storedTargets);
-    return storedTargets;
-    // TODO: Restore targets or whatever...
-    // const targets = storedTargets.map(t => {...t, })
+    return this.get<StoredTarget[]>(this.targetsKey);
   }
 
-  public saveTargets(targets: Target[]) {
+  public setTargets(targets: Target[]) {
     const storingTargets: StoredTarget[] = targets.map(({ group, students, color }) => ({ group, students, color }));
-    const stringifiedTargets = JSON.stringify(storingTargets);
-    localStorage.setItem(this.targetsKey, stringifiedTargets);
+    this.set(this.targetsKey, storingTargets);
   }
 
-  public saveGroups(groups: string[]) {
-    const stringified = JSON.stringify(groups);
-    localStorage.setItem(this.groupsKey, stringified);
+  public setGroups(groups: string[]) {
+    this.set(this.groupsKey, groups);
   }
-
 
   public getGroups() {
-    const stringified = localStorage.getItem(this.groupsKey);
-    if (!stringified) {
-      return null;
-    }
-    const groups = JSON.parse(stringified) as string[];
-    return groups;
+    return this.get<string[]>(this.groupsKey);
+  }
+
+  public setUser(userInfo: any) {
+    this.set(this.userKey, userInfo);
+  }
+
+  public getUser() {
+    return this.get(this.userKey);
   }
 }

@@ -24,8 +24,9 @@ export class AboutModalComponent implements OnInit {
   ngOnInit() {
   }
 
-  send() {
-    this.api.sendComment(this.comment);
+  async send() {
+    this.sent = true;
+    await this.api.sendComment(this.comment).toPromise();
     this.comment = '';
   }
 
