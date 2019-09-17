@@ -9,7 +9,4 @@ export class ResponsiveService {
 
   public readonly mobile = new BehaviorSubject<boolean>(false);
 
-  // ngOnDestroy(): void {
-  //   this.mobileQuery.removeListener(this.mobileQueryListener);
-  // }
 }

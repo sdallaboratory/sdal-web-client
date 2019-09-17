@@ -1,0 +1,34 @@
+stages:
+  - dockerize
+  - deploy
+
+#DOCKERIZING
+
+dockerize_angular:
+  stage: dockerize
+  image: docker
+  variables:
+    GIT_STRATEGY: clone
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+  script:
+    - docker build -t sdal-touch ./assets
+  after_script:
+    - docker login --username=$DOCKER_USER --password=$DOCKER_PASSWD
+    - docker tag sdal-touch $DOCKER_USER/sdal-touch
+    - docker push $DOCKER_USER/sdal-touch
+
+# DEPLOYING
+
+deploy:
+  stage: deploy
+  image: ictu/sshpass
+  variables:
+    GIT_STRATEGY: clone
+  dependencies:
+    - dockerize_angular
+  script:
+    - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker pull almosvirog/sdal-touch
+    - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker rm -f sdal-touch || true
+    - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker run -d -p 80:80 --name sdal-touch almosvirog/sdal-touch
