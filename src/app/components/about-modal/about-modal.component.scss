@@ -1,9 +1,14 @@
 :host {
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 header {
     display: flex;
     justify-content: space-between;
+}
+
+.raised {
+    align-self: flex-end;
 }

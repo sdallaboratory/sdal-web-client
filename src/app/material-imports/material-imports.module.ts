@@ -10,7 +10,6 @@ import {
   MatTooltipModule,
   MatChipsModule,
   MatSlideToggleModule,
-  MatMenuModule,
   MatDialogModule
 } from '@angular/material';
 

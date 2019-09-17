@@ -19,13 +19,14 @@ mat-sidenav {
         justify-content: space-between;
         padding: 0 10px;
     }
-    sdal-footer {
-        margin-top: auto;
-    }
     .scroll-box {
         display: flex;
         flex-direction: column;
         height: 100%;
+
+        sdal-footer {
+            margin-top: auto;
+        }
     }
 }
 

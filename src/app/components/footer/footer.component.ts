@@ -16,6 +16,7 @@ export class FooterComponent {
       width: '100vw',
       maxWidth: '700px',
       panelClass: 'about-modal-pane',
+      autoFocus: false,
       // maxHeight: '90vh'
     });
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GroupsService } from './groups.service';
+import { TelemetryService } from './telemetry.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ export class InitService {
 
   constructor(
     private readonly groups: GroupsService,
+    private readonly telemetry: TelemetryService,
   ) { }
 
   /**

@@ -3,9 +3,10 @@
         Добавленные группы
     </h3>
     <mat-list>
+        <!-- TODO: remove style="transform: scale(1.7)" attributes -->
         <ng-container *ngFor="let target of targetsList">
             <mat-list-item *ngIf="target.students && target.students.length == 1 && target.students[0] as student;">
-                <mat-icon mat-list-icon *ngIf="!target.scheduleLoaded">all_out</mat-icon>
+                <mat-icon mat-list-icon *ngIf="!target.scheduleLoaded" style="transform: scale(1.7)">all_out</mat-icon>
                 <img mat-list-icon [src]="student.avatar" *ngIf="target.scheduleLoaded && student.avatar"
                     style="transform: scale(1.7)">
                 <mat-icon mat-list-icon *ngIf="target.scheduleLoaded && !student.avatar" style="transform: scale(1.7)">
