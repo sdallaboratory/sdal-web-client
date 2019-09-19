@@ -74,8 +74,6 @@ export class TargetsService {
 
     this.targets.push(target);
     this.targetsSubject.next(this.targets);
-    console.log(this.storage);
-
     this.storage.setTargets(this.targets);
 
     return target;
