@@ -14,6 +14,7 @@ export class StorageService {
   private readonly targetsKey = 'targets';
   private readonly groupsKey = 'groups';
   private readonly userKey = 'user';
+  private readonly themeKey = 'theme';
 
   private set<T>(key: string, obj: T) {
     const stringified = JSON.stringify(obj);
@@ -48,5 +49,13 @@ export class StorageService {
 
   public getUser() {
     return this.get(this.userKey);
+  }
+
+  public setTheme(isDark: boolean) {
+    return this.set(this.themeKey, isDark);
+  }
+
+  public getTheme() {
+    return this.get(this.themeKey);
   }
 }

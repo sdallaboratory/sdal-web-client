@@ -19,6 +19,5 @@ export function getCampus(classroom: string): string | null {
         letter = campuses[letter];
     }
 
-    console.log(normalized, letter);
     return letter;
 }

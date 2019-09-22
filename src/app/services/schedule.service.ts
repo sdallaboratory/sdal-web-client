@@ -47,11 +47,11 @@ export class ScheduleService {
 
     const materialColors = [
       '#16D1FF55',
-      '#CC1CFF55',
       '#B388FF55',
       '#536DFE55',
       '#64FFDA55',
       '#DAF7A655',
+      '#CC1CFF55',
       '#FFC30055',
       '#B388FF55',
       '#536DFE55',

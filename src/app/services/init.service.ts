@@ -3,6 +3,7 @@ import { GroupsService } from './groups.service';
 import { TelemetryService } from './telemetry.service';
 import { ScheduleService } from './schedule.service';
 import { NowTimeService } from './now-time.service';
+import { ThemeService } from './theme.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class InitService {
   constructor(
     private readonly groups: GroupsService,
     private readonly telemetry: TelemetryService,
+    private readonly theme: ThemeService,
     private readonly nowTime: NowTimeService,
   ) { }
 

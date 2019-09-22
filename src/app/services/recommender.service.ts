@@ -116,10 +116,6 @@ export class RecommenderService {
 
     const hasLessons = new Set(flatten.map(l => l.group));
     const freeDayGroups: string[] = groups.filter(g => !hasLessons.has(g));
-    if (freeDayGroups.length) {
-      console.log(groups, new Set(flatten.map(l => l.group)), freeDayGroups);
-
-    }
 
     for (const slotToTest of timeSlots) {
 
@@ -165,7 +161,6 @@ export class RecommenderService {
 
       let type = 'free';
       if (nearestLessonAfter && nearestLessonBefore) {
-        console.log('mixed');
         type = 'mixed';
       } else if (nearestLessonBefore) {
         type = 'after';

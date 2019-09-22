@@ -10,10 +10,7 @@ import { getDayFromNuber, DayNumber } from '../utils/day-from-number';
 })
 export class NowTimeService {
 
-  public currentWeek: WeekInfo = {
-    number: 2,
-    weekName: 'знаменатель',
-  };
+  public currentWeek!: WeekInfo;
 
   public today!: string;
 
@@ -22,15 +19,14 @@ export class NowTimeService {
   ) { }
 
   public async init() {
-
+    this.setThisDay();
     setInterval(() => this.setThisDay(), 1000 * 60);
-
-    // this.currentWeek = await this.api.getCurrentWeek().toPromise();
-    // this.api.getCurrentWeek().pipe(
-    //   repeatWhen(() => interval(1000 * 60 * 60)),
-    // ).subscribe(week => {
-    //   this.currentWeek = week;
-    // });
+    this.currentWeek = await this.api.getCurrentWeek().toPromise();
+    this.api.getCurrentWeek().pipe(
+      repeatWhen(() => interval(1000 * 60 * 60)),
+    ).subscribe(week => {
+      this.currentWeek = week;
+    });
   }
 
   setThisDay() {

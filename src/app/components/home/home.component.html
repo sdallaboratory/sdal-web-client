@@ -1,6 +1,6 @@
 <mat-sidenav-container class="example-sidenav-container">
 
-    <mat-sidenav #snav [mode]="(responsive.mobile | async) ? 'over' : 'side'" opened>
+    <mat-sidenav #snav [mode]="(responsive.mobile | async) ? 'over' : 'side'" opened class="mat-elevation-z6">
         <div class="scroll-box">
             <button mat-mini-fab (click)="snav.toggle()" class="close-button">
                 <mat-icon>chevron_left</mat-icon>

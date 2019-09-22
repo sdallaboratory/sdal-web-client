@@ -1,35 +1,33 @@
-.time-slot {
-    display: flex;
-    justify-content: stretch;
+table {
+    width: 100%;
 }
 
-.time-range {
-    flex: none;
-    border: 3px solid transparent;
-    width: 100px;
+.time-slot {
+    justify-content: stretch;
+    .time-range {
+        flex: none;
+        border: 3px solid transparent;
+        width: unset;
+    }
 }
 
 .odd {
     background: #d1d1d165;
 }
 
-.groups-lessons {
-    flex: auto;
-    display: flex;
-    justify-content: stretch;
-    align-items: stretch;
-    * {
-        flex: 1 1 100%;
-        border: 3px solid transparent;
+td {
+    &:not(.time-range) {
+        width: 100%;
     }
-    .group-lesson {
+    border: 3px solid transparent;
+    &.group-lesson {
         &:hover {
             border-color: #00000044;
         }
-        // word-break: break-all;
     }
 }
 
 .today {
-    background: pink;
+    // background: pink;
+    // box-shadow: 0 3px 25px #cc99ffaa;
 }

@@ -18,7 +18,12 @@ export class ScheduleDayComponent implements OnInit {
     private readonly nowTime: NowTimeService,
   ) { }
 
+  public width = 100;
+
   ngOnInit() {
+    this.schedule.combinedSchedule.subscribe(s => {
+      this.width = 100 / (s && s[0].days[0].timeSlots[0].groupsLessons.length + 1 || 1);
+    });
   }
 
   public selectLesson(lesson: FullLesson) {

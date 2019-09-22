@@ -24,6 +24,7 @@ import { ScoreIconPipe } from './pipes/score-icon.pipe';
 import { FooterComponent } from './components/footer/footer.component';
 import { AboutModalComponent } from './components/about-modal/about-modal.component';
 import { WeekPipe } from './pipes/week.pipe';
+import { TimeRangePipe } from './pipes/time-range.pipe';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { WeekPipe } from './pipes/week.pipe';
     ScoreIconPipe,
     FooterComponent,
     AboutModalComponent,
-    WeekPipe
+    WeekPipe,
+    TimeRangePipe
   ],
   imports: [
     BrowserModule,
