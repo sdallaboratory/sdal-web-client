@@ -1,6 +1,9 @@
 <ng-container *ngIf="targets.targetsObservable | async as targetsList; else noTargets">
-    <h3 mat-subheader>
-        Добавленные группы
+    <h3 mat-subheader class="header">
+        <span> Добавленные группы </span>
+        <button mat-button (click)="targets.clear()">
+            Очистить<mat-icon>clear</mat-icon>
+        </button>
     </h3>
     <mat-list>
         <!-- TODO: remove style="transform: scale(1.7)" attributes -->
@@ -19,7 +22,8 @@
                 </button>
             </mat-list-item>
             <mat-list-item *ngIf="!target.students || target.students.length !== 1">
-                <mat-icon mat-list-icon [style.color]="target.color" style="transform: scale(1.7)">
+                <!-- TODO: [style.color]="target.color" -->
+                <mat-icon mat-list-icon style="transform: scale(1.7)">
                     {{target.scheduleLoaded ? 'supervised_user_circle' : 'all_out'}}
                 </mat-icon>
                 <h4 mat-line class="group">{{target.group}}</h4>

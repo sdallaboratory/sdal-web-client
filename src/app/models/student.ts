@@ -3,4 +3,5 @@ export interface Student {
     group: string;
     vk_id?: string;
     avatar?: string;
+    noSchedule?: boolean;
 }

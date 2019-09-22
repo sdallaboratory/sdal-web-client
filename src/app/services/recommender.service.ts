@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ScheduleService } from './schedule.service';
 import { CombinedDaySchedule, FullLesson, Lesson, ScheduleTimeSlot } from '../models/schedule-models';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import _ from 'lodash';
 import { Option, ScoredOption } from '../models/recommendations-models';
 import { getCampus } from '../utils/get-campus';
+import { LessonNumberPipe } from '../pipes/lesson-number.pipe';
+import { enumerate } from '../utils/lang/enumerate';
+import { randomElement } from '../utils/random-element';
+import { NowTimeService } from './now-time.service';
+import { WeekPipe } from '../pipes/week.pipe';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +17,8 @@ import { getCampus } from '../utils/get-campus';
 export class RecommenderService {
 
   constructor(
-    private readonly schedule: ScheduleService
+    private readonly schedule: ScheduleService,
+    private readonly nowTime: NowTimeService
   ) { }
 
   public readonly options = this.schedule.combinedSchedule.pipe(
@@ -20,30 +26,69 @@ export class RecommenderService {
     map(s => _.flatten(s.map(d => d.days))),
     map(days => _.flatten(days.map(this.buildOptions.bind(this)))),
     map(options => options.map(o => this.scoreOption(o))),
+    map(options => options.filter(o => o.score > 0)),
     map(options => _.orderBy(options, o => -o.score)),
     map(options => options.length ? options : null),
   );
 
-  private isSlotFree(slot: ScheduleTimeSlot) {
-    return slot.groupsLessons.every(l => !l.name);
+  daysCase = {
+    пн: 'в понедельник',
+    вт: 'во вторник',
+    ср: 'в среду',
+    чт: 'в четверг',
+    пт: 'в пятницу',
+    сб: 'в субботу',
+    вс: 'в воскресение',
+  } as { [day: string]: string };
+
+  private isSlotFree(slot: ScheduleTimeSlot | undefined) {
+
+    return !slot || slot.groupsLessons.every(l => !l.name);
   }
 
   isMilitary(lessonName: string) {
     const normalized = lessonName.split('/').join('').toLowerCase();
     return normalized.includes('военная подготовка')
-      || normalized === 'вп';
+      || /В\/*П/.test(lessonName)
+      || /В\/*К/.test(lessonName);
   }
 
   isPe(lessonName: string) {
     const normalized = lessonName.split('/').join('').toLowerCase();
     return normalized.includes('физкультура')
-      || normalized === 'спорт'
-      || normalized === 'валеология'
-      || normalized === 'физическая культура'
+      || normalized.includes('спорт')
+      || normalized.includes('валеология')
+      || normalized.includes('физическая культура');
   }
 
-  private getLessonsBefore() {
+  private getLessonsBefore(timeSlots: ScheduleTimeSlot[], lessonNumber: number) {
+    const lessonsBefore = {} as { [group: string]: FullLesson };
 
+    for (let i = 0; i < lessonNumber - 1; i++) {
+      const slot = timeSlots[i];
+      for (const lesson of slot.groupsLessons) {
+        if (lesson.name) {
+          lessonsBefore[lesson.group] = lesson;
+        }
+      }
+    }
+
+    return lessonsBefore;
+  }
+
+  private getLessonsAfter(timeSlots: ScheduleTimeSlot[], lessonNumber: number) {
+    const lessonsAfter = {} as { [group: string]: FullLesson };
+
+    for (let i = 7 - 1; i > lessonNumber - 1; i--) {
+      const slot = timeSlots[i];
+      for (const lesson of slot.groupsLessons) {
+        if (lesson.name) {
+          lessonsAfter[lesson.group] = lesson;
+        }
+      }
+    }
+
+    return lessonsAfter;
   }
 
 
@@ -51,172 +96,198 @@ export class RecommenderService {
   private buildOptions({ dayName, timeSlots }: CombinedDaySchedule) {
     const options: Option[] = [];
 
-    for (const slotToTest of timeSlots) {
-      if (!this.isSlotFree(slotToTest)) {
+    const flatten = _.flatten(timeSlots.map(s => s.groupsLessons)).filter(l => l.name);
+    const groups = timeSlots[0].groupsLessons.map(l => l.group);
+
+    const militaryDayGroups: string[] = [];
+    const peDayGroups: string[] = [];
+
+    for (const { name, group } of flatten) {
+      if (!name) {
         continue;
       }
+      if (this.isMilitary(name) && !militaryDayGroups.includes(group)) {
+        militaryDayGroups.push(group);
+      }
+      if (this.isPe(name) && !militaryDayGroups.includes(group)) {
+        peDayGroups.push(group);
+      }
+    }
+
+    const hasLessons = new Set(flatten.map(l => l.group));
+    const freeDayGroups: string[] = groups.filter(g => !hasLessons.has(g));
+    if (freeDayGroups.length) {
+      console.log(groups, new Set(flatten.map(l => l.group)), freeDayGroups);
+
+    }
+
+    for (const slotToTest of timeSlots) {
 
       const { week, day, timeRange, lessonNumber } = slotToTest.groupsLessons[0];
 
-      const flatten = _.flatten(timeSlots.map(s => s.groupsLessons));
+      const prevSlot = timeSlots[lessonNumber - 1 - 1];
+      const nextSlot = timeSlots[lessonNumber + 1 - 1];
 
-      const militaryDayGroups: string[] = [];
-      const peDayGroups: string[] = [];
-      for (const { name, group } of flatten) {
-        if (!name) {
-          continue;
-        }
-        if (this.isMilitary(name) && militaryDayGroups.includes(group)) {
-          militaryDayGroups.push(group);
-        }
-        if (this.isPe(name) && militaryDayGroups.includes(group)) {
-          peDayGroups.push(group);
-        }
+      // TODO: Maybe suggest to meet in totally free days;
+      if (this.isSlotFree(prevSlot)
+        && this.isSlotFree(nextSlot)
+        || !this.isSlotFree(slotToTest)) {
+        continue;
       }
 
-      const freeDayGroups: string[] = [];
 
-      // const lessonsBefore: FullLesson[] = [];
-      const lessonsAfter: FullLesson[] = [];
+      // const lessonNumber = this.lessonNumber.transform(slotToTest.timeRange);
 
-      const lessonsBefore = flatten.filter(l => l.name).filter(l => l.lessonNumber < lessonNumber);
+      const lessonsBefore = this.getLessonsBefore(timeSlots, lessonNumber);
+      const lessonsAfter = this.getLessonsAfter(timeSlots, lessonNumber);
 
-      for (const slot of timeSlots) {
-        for (const lesson of slot.groupsLessons) {
-          // if 
-        }
+      const locationsBefore = prevSlot && prevSlot.groupsLessons.map(l => l.location).filter(l => l);
+      const locationsAfter = nextSlot && nextSlot.groupsLessons.map(l => l.location).filter(l => l);
+
+
+      const sameCampusBefore = locationsBefore && locationsBefore.length === slotToTest.groupsLessons.length
+        && new Set(locationsBefore.map(l => l && getCampus(l))).size === 1 && getCampus(locationsBefore![0]!);
+
+      const sameCampusAfter = locationsAfter && locationsAfter.length === slotToTest.groupsLessons.length
+        && new Set(locationsAfter.map(l => l && getCampus(l))).size === 1 && getCampus(locationsAfter![0]!);
+
+      const sameClassroomBefore = sameCampusBefore
+        && new Set(locationsBefore).size === 1;
+
+      const sameClassroomAfter = sameCampusAfter
+        && new Set(locationsAfter).size === 1;
+
+      const totalWaitTime = [...Object.values(lessonsAfter), ...Object.values(lessonsBefore)]
+        .reduce((acc, cur) => acc + Math.abs(cur.lessonNumber - lessonNumber), 0);
+
+      const nearestLessonBefore = _.maxBy(Object.values(lessonsBefore), l => l.lessonNumber);
+      const nearestLessonAfter = _.minBy(Object.values(lessonsAfter), l => l.lessonNumber);
+
+      let type = 'free';
+      if (nearestLessonAfter && nearestLessonBefore) {
+        console.log('mixed');
+        type = 'mixed';
+      } else if (nearestLessonBefore) {
+        type = 'after';
+      } else if (nearestLessonAfter) {
+        type = 'before';
       }
 
       const option = {
-
+        timeRange,
+        week,
+        day,
+        type,
+        lessonsBefore,
+        nearestLessonBeforeNumber: nearestLessonBefore && nearestLessonBefore.lessonNumber,
+        lessonsAfter,
+        nearestLessonAfterNumber: nearestLessonAfter && nearestLessonAfter.lessonNumber,
+        militaryDayGroups,
+        peDayGroups,
+        freeDayGroups,
+        sameCampusBefore,
+        sameClassroomBefore,
+        sameCampusAfter,
+        sameClassroomAfter,
+        totalWaitLessons: totalWaitTime,
+        // timeOfDay: 'morning',
       } as Option;
-
-      // options.push(option);
+      options.push(option);
     }
-
     return options;
   }
-  // private buildOptions(daySchedule: CombinedDaySchedule) {
-
-
-  //   const freeDayGroups: string[] = [];
-  //   const militaryDayGroups: string[] = [];
-  //   const peDayGroups: string[] = [];
-
-  //   for (const group in byGroups) {
-  //     if (byGroups.hasOwnProperty(group)) {
-  //       const lessons = byGroups[group];
-
-  //       if (lessons.some(l => !!l.name
-  //         && (l.name.toLowerCase().includes('военная подготовка')
-  //           || l.name.includes('ВП')
-  //           || l.name.includes('В/П')))) {
-  //         militaryDayGroups.push(group);
-  //       }
-
-  //       if (lessons.every(l => !l.name)) {
-  //         freeDayGroups.push(group);
-  //       }
-  //     }
-  //   }
-
-  //   const firsts: { [group: string]: FullLesson } = {};
-  //   const lasts: { [group: string]: FullLesson } = {};
-
-  //   for (const slot of daySchedule.timeSlots) {
-  //     for (const lesson of slot.groupsLessons) {
-  //       const group = lesson.group;
-  //       if (!lesson.name) {
-  //         continue; // NOT BREAK
-  //       }
-  //       lasts[group] = (lesson);
-  //       if (!Object.keys(firsts).includes(group)) {
-  //         firsts[group] = lesson;
-  //       }
-  //     }
-  //   }
-
-  //   const options = [];
-
-  //   const lessons = [...Object.values(lasts)];
-
-  //   const lessonsNumbers = lessons.map(l => l.lessonNumber);
-  //   const locations = lessons.map(l => ({ ...l, location: l.location && l.location.replace('каф', '') } as Lesson))
-  //     .filter(l => l.location)
-  //     .map(l => l.location);
-  //   // TODO: Handle same 'каф'
-  //   const sameCampus = locations.length === lessons.length && new Set(locations.map(l => getCampus(l!))).size === 1;
-  //   const sameClassroom = sameCampus && new Set(locations).size === 1;
-
-  //   const firstLessonNumber = _.min(lessonsNumbers);
-  //   const lastLessonNumber = _.min(lessonsNumbers);
-
-  //   const afterOption: Option = {
-  //     week: daySchedule.dayName
-  //     type: 'after',
-  //     maxLessonsWait: (lastLessonNumber || 0) - (firstLessonNumber || 0),
-  //     militaryDayGroups,
-  //     freeDayGroups,
-  //     lessons,
-  //     sameCampus,
-  //     sameClassroom,
-  //     peDayGroups: [],
-  //     firstLessonNumber,
-  //     lastLessonNumber,
-  //   };
-
-  //   return [afterOption] as Option[];
-  // }
 
   private scoreOption(option: Option) {
-    let score = 0;
+    let score = 50;
 
     if (option.type === 'after') {
       score += 30;
     } else if (option.type === 'before') {
-      score += 15;
+      score += 20;
     } else if (option.type === 'mixed') {
+      score += 20;
+    } else if (option.type === 'free') {
       score += 10;
     }
 
-    score -= option.maxLessonsWait * 5;
+    // score -= option.maxLessonsWait * 5;
+    score -= option.totalWaitLessons * 6;
+
     score -= (option.militaryDayGroups || []).length * 5;
-    score -= (option.freeDayGroups || []).length * 10;
+    score -= (option.freeDayGroups || []).length * 20;
     score -= (option.peDayGroups || []).length * 2;
 
-    if (option.sameCampus) {
-      score += 5;
+    if (option.sameCampusBefore || option.sameCampusAfter) {
+      score += 15;
     }
 
-    if (option.sameClassroom) {
-      score += 10;
+    if (option.sameClassroomBefore || option.sameClassroomAfter) {
+      score += 30;
     }
 
+    // TODO: Check if day has gone.
+    if (this.nowTime.currentWeek.weekName !== option.week) {
+      score -= 20;
+    }
 
     const scored: ScoredOption = { ...option, score };
+
     return scored;
   }
 
   public verbalize(option: Option, full?: boolean) {
     const terms: string[] = [];
-    terms.push('Встретиться');
-    if (option.type === 'after') {
-      terms.push('после');
-      terms.push(`${option.lastLessonNumber}`);
-      terms.push('пары');
-    } else if (option.type === 'before') {
-      terms.push('перед');
-      terms.push(`${option.firstLessonNumber}`);
-      terms.push('парой');
+    terms.push(randomElement([
+      'Устройте встречу',
+      'Договоритесь о встрече',
+      'Подходящее время для встречи',
+      'Можно встретиться',
+    ]));
+
+    // TODO: на этой неделе, на следующей неделе.
+    terms.push(`${this.daysCase[option.day]} на ${option.week === this.nowTime.currentWeek.weekName ? 'этой неделе' : 'следующей  '}`);
+
+    switch (option.type) {
+      case 'before':
+        terms.push(`перед ${option.nearestLessonAfterNumber} парой`);
+        break;
+      case 'after':
+        terms.push(`после ${option.nearestLessonBeforeNumber} пары`);
+        break;
+      case 'mixed':
+        terms.push(`между ${option.nearestLessonBeforeNumber} и ${option.nearestLessonAfterNumber} парами`);
+        break;
+      case 'free':
+        terms.push(`в любое время, так как в этот день ни у кого нет пар`);
+        break;
     }
-    const lesson = option.lessons[0];
-    if (lesson) {
-      terms.push('в');
-      terms.push(`${lesson.day}`);
-      terms.push('на');
-      terms.push(`${lesson.week.toLocaleLowerCase().replace('ь', 'е')}`);
-      terms.push('.');
+    terms.push('.');
+
+    if (option.sameClassroomBefore) {
+      terms.push('Очень удобное время, так последняя пара у вас - общая.');
+    } else if (option.sameCampusBefore) {
+      terms.push(`Занятия у вас заканчиваются в одном корпусе - ${option.sameCampusBefore}.`);
     }
-    return terms.join(' ');
+
+    if (option.sameClassroomAfter) {
+      terms.push('Первая после встречи пара у вас общая. Можете пойти туда вместе.');
+    } else if (option.sameCampusAfter) {
+      terms.push(`Занятия как раз начинаются в одном корпусе - ${option.sameCampusAfter}.`);
+    }
+
+    if (option.militaryDayGroups && option.militaryDayGroups.length) {
+      terms.push(`У ребят из ${enumerate(...option.militaryDayGroups)} военка ${this.daysCase[option.day]}, что не очень удобно.`);
+    }
+
+    if (option.peDayGroups && option.peDayGroups.length) {
+      terms.push(`У ${enumerate(...option.peDayGroups)} в этот день физра, придётся таскаться с формой.`);
+    }
+
+    if (option.freeDayGroups && option.freeDayGroups.length) {
+      terms.push(`Учтите, что групп${option.freeDayGroups.length === 1 ? 'ы' : ''}`);
+      terms.push(`${enumerate(...option.freeDayGroups)} в этот день нет пар.`);
+    }
+
+    return terms.join(' ').replace(' .', '.');
   }
 }

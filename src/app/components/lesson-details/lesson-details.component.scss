@@ -1,8 +1,12 @@
-mat-card {
+:host {
     display: flex;
     justify-content: center;
+}
+
+mat-card {
+    flex: 0 1 500px;
+
     div {
-        flex: 0 1 500px;
     }
 
     mat-card-header {

@@ -6,7 +6,7 @@ export interface LessonsMap {
 export interface Option {
     week: string;
     day: string;
-    type: 'before' | 'after' | 'mixed';
+    type: 'before' | 'after' | 'mixed' | 'free';
     lessonsBefore: LessonsMap;
     nearestLessonBeforeNumber?: number;
     lessonsAfter: LessonsMap;
@@ -14,15 +14,20 @@ export interface Option {
     militaryDayGroups?: string[];
     peDayGroups?: string[];
     freeDayGroups?: string[];
-    sameCampus: boolean;
-    sameClassroom: boolean;
-    timeOfDay: 'morning' | 'day' | 'evening';
+    sameCampusBefore?: string;
+    sameCampusAfter?: string;
+    sameClassroomBefore: string;
+    sameClassroomAfter: string;
+    totalWaitLessons: number;
+
+    timeRange: string;
+    // timeOfDay: 'morning' | 'day' | 'evening';
 
     // deprecated
-    lessons: (FullLesson | null)[];
-    firstLessonNumber?: number;
-    lastLessonNumber?: number;
-    maxLessonsWait: number;
+    // lessons: (FullLesson | null)[];
+    // firstLessonNumber?: number;
+    // lastLessonNumber?: number;
+    // maxLessonsWait: number;
 }
 
 export interface ScoredOption extends Option {

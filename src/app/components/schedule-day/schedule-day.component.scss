@@ -10,7 +10,7 @@
 }
 
 .odd {
-    background: #f1f1f1;
+    background: #d1d1d165;
 }
 
 .groups-lessons {
@@ -28,4 +28,8 @@
         }
         // word-break: break-all;
     }
+}
+
+.today {
+    background: pink;
 }

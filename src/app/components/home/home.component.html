@@ -5,9 +5,9 @@
             <button mat-mini-fab (click)="snav.toggle()" class="close-button">
                 <mat-icon>chevron_left</mat-icon>
             </button>
-            <h1 mat-header>
-                <span mat-line>SDAL Touch</span>
-            </h1>
+            <div class="touch-logo-wrapper">
+                <img src="/assets/logo/touch-logo.svg" alt="SDAL Touch" class="touch-logo">
+            </div>
             <div>
                 <sdal-targets></sdal-targets>
             </div>
@@ -29,7 +29,7 @@
         <div class="scroll-box">
             <sdal-recommendations></sdal-recommendations>
             <sdal-schedule-table></sdal-schedule-table>
-            <div style="position: sticky; bottom: 0; position:-webkit-sticky; z-index: 150">
+            <div style="position: sticky; bottom: 0; position:-webkit-sticky; z-index: 150; ">
                 <sdal-lesson-details style="user-select: none; touch-action: none;" draggable="false">
                 </sdal-lesson-details>
             </div>

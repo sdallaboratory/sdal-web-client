@@ -18,13 +18,18 @@ export interface GroupSchedule {
     days: DaySchedule[];
 }
 
+export interface WeekInfo {
+    number: number;
+    weekName: string;
+}
+
 // Frontend models
 
 export interface FullLesson extends Lesson {
     lessonNumber: number;
     group: string;
     color: string;
-    week: 'Числитель' | 'Знаменатель';
+    week: 'числитель' | 'знаменатель';
     day: string;
 }
 
@@ -39,6 +44,6 @@ export interface CombinedDaySchedule {
 }
 
 export interface CombinedWeekSchedule {
-    weekName: 'enumerator' | 'denominator';
+    weekName: 'числитель' | 'знаменатель';
     days: CombinedDaySchedule[];
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CombinedDaySchedule, FullLesson } from 'src/app/models/schedule-models';
 import { ScheduleService } from 'src/app/services/schedule.service';
+import { NowTimeService } from 'src/app/services/now-time.service';
 
 @Component({
   selector: 'sdal-schedule-day',
@@ -14,6 +15,7 @@ export class ScheduleDayComponent implements OnInit {
 
   constructor(
     private readonly schedule: ScheduleService,
+    private readonly nowTime: NowTimeService,
   ) { }
 
   ngOnInit() {
@@ -21,6 +23,21 @@ export class ScheduleDayComponent implements OnInit {
 
   public selectLesson(lesson: FullLesson) {
     this.schedule.selectedLesson.next(lesson);
+  }
+
+  public get id() {
+    // TODO: Filth
+    const { week, day } = this.day.timeSlots[0].groupsLessons[0];
+    return `${week}-${day}`.toLowerCase();
+  }
+
+  public get isToday() {
+    const { week, day } = this.day.timeSlots[0].groupsLessons[0];
+    return this.nowTime.today === day && this.nowTime.currentWeek.weekName === week;
+  }
+
+  public get groups() {
+    return this.day.timeSlots[0].groupsLessons.map(l => l.group);
   }
 
 }

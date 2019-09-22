@@ -34,6 +34,8 @@ export class SearchService {
     mergeMap(q => !q ? of<Student[]>([]) : this.api.searchStudents(q, 8)),
     combineLatest(this.targets.targetsStudents.pipe(startWith([]))),
     map(([students, targetedStudents]) => students.filter(s => !_.find(targetedStudents || [], ts => compareStudents(s, ts)))),
+    // TODO: mark as noSchedule.
+    map(students => students.filter(s => this.groupsService.names.has(s.group))),
     catchError(() => of<Student[]>([])),
     map(students => students.length ? students : null),
   );

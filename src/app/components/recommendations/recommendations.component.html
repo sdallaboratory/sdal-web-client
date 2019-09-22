@@ -2,13 +2,15 @@
     <h3 mat-subheader>Рекомендации</h3>
     <mat-list>
         <ng-container *ngFor="let option of options; index as i">
-            <mat-list-item *ngIf="full || i < 3">
+            <div *ngIf="full || i < 3" class="list-item">
                 <!-- [style.color]="'rgb(' + (250 - option.score * 5) +','+ option.score*5 +',0)'" -->
-                <mat-icon>{{option.score | scoreIcon}}</mat-icon>
-                <!-- {{option.score}} -->
-                {{option | option : false}}
+                <mat-icon class="item-icon">{{option.score | scoreIcon}}</mat-icon>
+                <a class="option" href="#{{option.week + '-' + option.day}}">
+                    {{option | option : false}}
+                </a>
                 <br>
-            </mat-list-item>
+                <hr>
+            </div>
         </ng-container>
     </mat-list>
     <p>

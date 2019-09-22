@@ -23,6 +23,7 @@ import { HasSchedulePipe } from './pipes/has-schedule.pipe';
 import { ScoreIconPipe } from './pipes/score-icon.pipe';
 import { FooterComponent } from './components/footer/footer.component';
 import { AboutModalComponent } from './components/about-modal/about-modal.component';
+import { WeekPipe } from './pipes/week.pipe';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { AboutModalComponent } from './components/about-modal/about-modal.compon
     HasSchedulePipe,
     ScoreIconPipe,
     FooterComponent,
-    AboutModalComponent
+    AboutModalComponent,
+    WeekPipe
   ],
   imports: [
     BrowserModule,

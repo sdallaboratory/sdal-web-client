@@ -1,10 +1,10 @@
 <ng-container *ngIf="schedule.combinedSchedule | async as combinedSchedule; else noSchedule">
     <div *ngFor="let week of combinedSchedule" class="week-schedule">
-        <h2 mat-header>{{week.weekName}}</h2>
+        <h2 mat-header> {{week.weekName | week}} ({{week.weekName}})</h2>
         <sdal-schedule-day *ngFor="let day of week.days" [day]="day">
         </sdal-schedule-day>
     </div>
 </ng-container>
 <ng-template #noSchedule>
-    <p style="height: 50vh; display: flex; align-items: center;">Выберите группы для сравнения расписания.</p>
+    <p style="height: 80vh; display: flex; align-items: center;">Выберите группы для сравнения расписания.</p>
 </ng-template>

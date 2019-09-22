@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GroupSchedule } from '../models/schedule-models';
+import { GroupSchedule, WeekInfo } from '../models/schedule-models';
 import { Student } from '../models/student';
 import { TargetsTelemetry } from '../models/telemetry-models';
 
@@ -44,6 +44,10 @@ export class ApiService {
 
   public sendTargetsTelemetry(targetsInfo: TargetsTelemetry) {
     return this.http.post('/api/touch/telemetry/targets', targetsInfo);
+  }
+
+  public getCurrentWeek() {
+    return this.http.get<WeekInfo>('/api/schedule/current-week');
   }
 
 }
