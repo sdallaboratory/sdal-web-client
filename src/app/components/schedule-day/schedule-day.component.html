@@ -32,10 +32,10 @@
 <mat-card [attr.id]="id" [class.today]="isToday" color="primary">
     <table>
         <tr class="time-slot">
-            <td class="time-range"></td>
-            <td *ngFor="let group of groups" [style.width.%]="width">
+            <th class="time-range"></th>
+            <th *ngFor="let group of groups" [style.width.%]="width">
                 {{group}}
-            </td>
+            </th>
         </tr>
         <tr *ngFor="let slot of day.timeSlots; let odd = odd;" class="time-slot" [class.odd]="odd">
             <td class="time-range">
