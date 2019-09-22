@@ -22,7 +22,7 @@ export class ScheduleDayComponent implements OnInit {
 
   ngOnInit() {
     this.schedule.combinedSchedule.subscribe(s => {
-      this.width = 100 / (s && s[0].days[0].timeSlots[0].groupsLessons.length + 1 || 1);
+      this.width = 100 / (s && s[0].days[0].timeSlots[0].groupsLessons.length || 1);
     });
   }
 

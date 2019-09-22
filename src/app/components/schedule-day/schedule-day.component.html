@@ -32,8 +32,8 @@
 <mat-card [attr.id]="id" [class.today]="isToday" color="primary">
     <table>
         <tr class="time-slot">
-            <td></td>
-            <td *ngFor="let group of groups">
+            <td class="time-range"></td>
+            <td *ngFor="let group of groups" [style.width.%]="width">
                 {{group}}
             </td>
         </tr>

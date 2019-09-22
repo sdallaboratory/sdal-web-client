@@ -16,9 +16,6 @@ table {
 }
 
 td {
-    &:not(.time-range) {
-        width: 100%;
-    }
     border: 3px solid transparent;
     &.group-lesson {
         &:hover {
