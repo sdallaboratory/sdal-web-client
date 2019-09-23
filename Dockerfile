@@ -7,6 +7,7 @@ RUN ng build --prod
 
 FROM nginx
 
+COPY default.conf /etc/nginx/conf.d/
 COPY --from=build /app/dist/touch /usr/share/nginx/html
 
 
