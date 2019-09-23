@@ -240,7 +240,7 @@ export class RecommenderService {
     ]));
 
     // TODO: на этой неделе, на следующей неделе.
-    terms.push(`${this.daysCase[option.day]} на ${option.week === this.nowTime.currentWeek.weekName ? 'этой неделе' : 'следующей  '}`);
+    terms.push(`${this.daysCase[option.day]} на ${option.week === this.nowTime.currentWeek.weekName ? 'этой' : 'следующей'} неделе`);
 
     switch (option.type) {
       case 'before':

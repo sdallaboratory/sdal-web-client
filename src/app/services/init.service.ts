@@ -4,6 +4,7 @@ import { TelemetryService } from './telemetry.service';
 import { ScheduleService } from './schedule.service';
 import { NowTimeService } from './now-time.service';
 import { ThemeService } from './theme.service';
+import { DemoService } from './demo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class InitService {
     private readonly telemetry: TelemetryService,
     private readonly theme: ThemeService,
     private readonly nowTime: NowTimeService,
+    private readonly demo: DemoService,
   ) { }
 
   /**
@@ -32,6 +34,7 @@ export class InitService {
       await Promise.all([
         this.groups.init(),
         this.nowTime.init(),
+        this.demo.init(),
       ]);
       console.log('Приложение было успешно инициализировано.');
     } catch {

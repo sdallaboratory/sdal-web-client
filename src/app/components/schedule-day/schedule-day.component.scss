@@ -1,5 +1,6 @@
 table {
     width: 100%;
+    table-layout: fixed;
 }
 
 .time-slot {
@@ -18,6 +19,10 @@ table {
 td {
     border: 3px solid transparent;
     &.group-lesson {
+        // word-break: break-all;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
         &:hover {
             border-color: #00000044;
         }

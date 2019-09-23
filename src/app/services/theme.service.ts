@@ -26,7 +26,6 @@ export class ThemeService {
     private readonly storage: StorageService
   ) {
     const isDark = storage.getTheme();
-    console.log(isDark);
 
     if (typeof isDark === 'boolean') {
       this.isDark = isDark;

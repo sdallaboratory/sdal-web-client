@@ -32,11 +32,8 @@ mat-sidenav {
         display: flex;
         flex-direction: column;
         height: 100%;
-        * {
-            // width: 100%;
-        }
 
-        sdal-footer {
+        footer {
             display: block;
             margin-top: auto;
             padding-bottom: 10px;

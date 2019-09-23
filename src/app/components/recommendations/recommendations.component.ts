@@ -23,4 +23,9 @@ export class RecommendationsComponent implements OnInit {
   ngOnInit() {
   }
 
+  public move(hash: string) {
+    location.hash = '';
+    location.hash = hash;
+  }
+
 }
