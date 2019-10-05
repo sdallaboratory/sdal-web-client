@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { GroupSchedule, WeekInfo } from '../models/schedule-models';
 import { Student } from '../models/student';
 import { TargetsTelemetry } from '../models/telemetry-models';
+import { TouchUser } from '../models/touch-auth-models';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,14 @@ export class ApiService {
 
   public getCurrentWeek() {
     return this.http.get<WeekInfo>('/api/schedule/current-week');
+  }
+
+  public signOut(sessionId: string) {
+    return this.http.delete(`/api/touch/user/${sessionId}`);
+  }
+
+  public getTouchUser(sessionId: string) {
+    return this.http.get<TouchUser | null>(`/api/touch/user/${sessionId}`);
   }
 
 }

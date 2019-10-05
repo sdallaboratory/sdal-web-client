@@ -22,7 +22,6 @@ export class DemoService {
   ) { }
 
   async init() {
-    console.log(window.location.pathname);
     if (window.location.pathname.includes('/%D0%B4%D0%BB%D1%8F_%D0%B8%D1%80%D1%8B')) {
       console.log('Специальная ссылка для Иры');
       this.targets.addGroup('СГН3-72Б', [this.ira]);

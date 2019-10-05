@@ -25,6 +25,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { AboutModalComponent } from './components/about-modal/about-modal.component';
 import { WeekPipe } from './pipes/week.pipe';
 import { TimeRangePipe } from './pipes/time-range.pipe';
+import { VkOauthComponent } from './components/vk-oauth/vk-oauth.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { TimeRangePipe } from './pipes/time-range.pipe';
     FooterComponent,
     AboutModalComponent,
     WeekPipe,
-    TimeRangePipe
+    TimeRangePipe,
+    VkOauthComponent
   ],
   imports: [
     BrowserModule,

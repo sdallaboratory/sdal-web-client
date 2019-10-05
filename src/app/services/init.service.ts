@@ -5,6 +5,7 @@ import { ScheduleService } from './schedule.service';
 import { NowTimeService } from './now-time.service';
 import { ThemeService } from './theme.service';
 import { DemoService } from './demo.service';
+import { VkOauthService } from './vk-oauth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class InitService {
     private readonly theme: ThemeService,
     private readonly nowTime: NowTimeService,
     private readonly demo: DemoService,
+    private readonly auth: VkOauthService,
   ) { }
 
   /**
@@ -35,6 +37,7 @@ export class InitService {
         this.groups.init(),
         this.nowTime.init(),
         this.demo.init(),
+        this.auth.init(),
       ]);
       console.log('Приложение было успешно инициализировано.');
     } catch {

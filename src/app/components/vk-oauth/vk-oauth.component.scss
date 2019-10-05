@@ -1,0 +1,19 @@
+.flex-container {
+    display: flex;
+    align-items: center;
+    .vk-logo {
+        margin: 10px;
+        flex: none;
+    }
+}
+
+.user-pic {
+    flex: none;
+    margin: 10px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+.exit-button {
+    margin: 10px;
+}

@@ -20,6 +20,11 @@ export class GroupsService {
     if (!groups) {
       groups = await this.api.getGroups().toPromise();
       this.storage.setGroups(groups);
+    } else {
+      this.api.getGroups().toPromise().then(gs => {
+        this.storage.setGroups(gs);
+        this.names = new Set(gs);
+      });
     }
     this.names = new Set(groups);
   }

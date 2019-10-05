@@ -15,7 +15,7 @@
 </head>
 
 <body>
-  <sdal-root tabindex="0">
+  <sdal-root tabindex="0" id="root">
     <style>
       html,
       body,
@@ -31,6 +31,10 @@
         background: white;
       }
 
+      sdal-root.loading-dark {
+        background: rgb(48, 48, 48);
+      }
+
       svg {
         width: 80vw;
         max-width: 700px;
@@ -38,7 +42,9 @@
     </style>
     <script>
       const dark = JSON.parse(localStorage.getItem('theme'));
-      console.log(dark);
+      if (dark) {
+        document.getElementById('root').classList.add('loading-dark');
+      }
       // TODO: Set dark loading bg;
     </script>
     <svg version="1.1" id="Слой_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"

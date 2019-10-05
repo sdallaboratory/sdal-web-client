@@ -37,7 +37,7 @@ export class ScheduleService {
     switchMap(targets => Promise.all(targets.map(t => t.schedulePromise))),
     map(this.flattenSchdeule.bind(this)),
     map(lessons => lessons.map(
-      l => ({ ...l, name: l.name && l.name.replace('СР', '').replace('Самостоятельная работа', '') } as FullLesson)
+      l => ({ ...l, name: l.name && l.name.replace('САМ РАБ', '').replace(/С\/?Р/, '').replace('Самостоятельная работа', '') } as FullLesson)
     )),
     map(this.combineSchedules),
     map(schedule => schedule && _.orderBy(schedule, s => s.weekName !== this.nowTime.currentWeek.weekName)),
