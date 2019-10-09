@@ -9,6 +9,7 @@ import { ApiService } from './api.service';
 import _ from 'lodash';
 import { Student } from '../models/student';
 import { compareStudents } from '../utils/compare-students';
+import { SessionService } from './session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class SearchService {
   // TODO: Handle update on targets
   public readonly students = this.query.pipe(
     map(normalizeText),
-    mergeMap(q => !q ? of<Student[]>([]) : this.api.searchStudents(q, 8)),
+    mergeMap(q => !q ? of<Student[]>([]) : this.api.searchStudents(q, 8, this.session.guid)),
     combineLatest(this.targets.targetsStudents.pipe(startWith([]))),
     map(([students, targetedStudents]) => students.filter(s => !_.find(targetedStudents || [], ts => compareStudents(s, ts)))),
     // TODO: mark as noSchedule.
@@ -48,5 +49,6 @@ export class SearchService {
     private readonly groupsService: GroupsService,
     private readonly api: ApiService,
     private readonly targets: TargetsService,
+    private readonly session: SessionService,
   ) { }
 }

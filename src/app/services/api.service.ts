@@ -23,11 +23,12 @@ export class ApiService {
     return this.http.get<string[]>(`/api/schedule/groups`);
   }
 
-  public searchStudents(query?: string, limit?: number) {
+  public searchStudents(query?: string, limit?: number, sessionId?: string) {
     return this.http.get<Student[]>(`/api/students`, {
       params: {
         query,
         limit,
+        sessionId
         // group: { $exists: true },
       } as any
     });
