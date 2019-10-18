@@ -259,13 +259,13 @@ export class RecommenderService {
     terms.push('.');
 
     if (option.sameClassroomBefore) {
-      terms.push('Очень удобное время, так последняя пара у вас - общая.');
+      terms.push('Очень удобное время, так последняя пара у вас - общая');
     } else if (option.sameCampusBefore) {
       terms.push(`Занятия у вас заканчиваются в одном корпусе - ${option.sameCampusBefore}.`);
     }
 
     if (option.sameClassroomAfter) {
-      terms.push('Первая после встречи пара у вас общая. Можете пойти туда вместе.');
+      terms.push('Первая после встречи пара у вас общая. Можете пойти туда вместе');
     } else if (option.sameCampusAfter) {
       terms.push(`Занятия как раз начинаются в одном корпусе - ${option.sameCampusAfter}.`);
     }
@@ -275,12 +275,12 @@ export class RecommenderService {
     }
 
     if (option.peDayGroups && option.peDayGroups.length) {
-      terms.push(`У ${enumerate(...option.peDayGroups)} в этот день физра, придётся таскаться с формой.`);
+      terms.push(`У ${enumerate(...option.peDayGroups)} в этот день физра, придётся таскаться с формой`);
     }
 
     if (option.freeDayGroups && option.freeDayGroups.length) {
       terms.push(`Учтите, что групп${option.freeDayGroups.length === 1 ? 'ы' : ''}`);
-      terms.push(`${enumerate(...option.freeDayGroups)} в этот день нет пар.`);
+      terms.push(`${enumerate(...option.freeDayGroups)} в этот день нет пар`);
     }
 
     return terms.join(' ').replace(' .', '.');
