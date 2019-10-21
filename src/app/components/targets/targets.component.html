@@ -1,6 +1,6 @@
 <ng-container *ngIf="targets.targetsObservable | async as targetsList; else noTargets">
     <h3 mat-subheader class="header">
-        <span> Добавленные группы </span>
+        <span> Расписания в сравнении </span>
         <button mat-button (click)="targets.clear()">
             Очистить<mat-icon>clear</mat-icon>
         </button>
@@ -39,5 +39,5 @@
     </mat-list>
 </ng-container>
 <ng-template #noTargets>
-    <p>Добавтьте несколько групп, чтобы сравнить расписание</p>
+    <p>Добавтьте несколько расписаний для сравнения.</p>
 </ng-template>

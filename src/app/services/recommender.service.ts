@@ -23,6 +23,7 @@ export class RecommenderService {
 
   public readonly options = this.schedule.combinedSchedule.pipe(
     map(s => s || []),
+    map(s => s.length <= 1 ? [] : s),
     map(s => _.flatten(s.map(d => d.days))),
     map(days => _.flatten(days.map(this.buildOptions.bind(this)))),
     map(options => options.map(o => this.scoreOption(o))),
