@@ -25,8 +25,6 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.addFirst.pipe(
       mergeMap(() => search.results.pipe(first())),
     ).subscribe(({ students, groups }) => {
-      console.log('GO');
-
       if (groups && groups.length) {
         this.targets.addGroup(groups[0]);
       } else if (students && students.length) {
