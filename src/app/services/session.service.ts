@@ -10,17 +10,17 @@ export class SessionService {
   public readonly startTimeMs: number;
 
   constructor() {
-    let guid = sessionStorage.getItem('sessionId');
+    let guid = localStorage.getItem('sessionId');
     if (!guid) {
       guid = createGuid();
-      sessionStorage.setItem('sessionId', guid);
+      localStorage.setItem('sessionId', guid);
     }
     this.guid = guid;
 
-    let milliseconds: string | number | null = sessionStorage.getItem('sessionMs');
+    let milliseconds: string | number | null = localStorage.getItem('sessionMs');
     if (!milliseconds) {
       milliseconds = new Date().getTime();
-      sessionStorage.setItem('sessionMs', milliseconds.toString());
+      localStorage.setItem('sessionMs', milliseconds.toString());
     }
     this.startTimeMs = +milliseconds;
   }
