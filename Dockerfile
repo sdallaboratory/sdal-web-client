@@ -3,7 +3,7 @@ FROM trion/ng-cli:8.3.8 as build
 COPY . /app
 
 RUN npm install
-RUN ng build --prod
+RUN ng build --prod --base-href=/touch/ --deploy-url=/touch/
 
 FROM nginx:1.17.4
 
