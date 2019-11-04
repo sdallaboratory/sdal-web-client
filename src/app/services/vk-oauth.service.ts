@@ -47,12 +47,11 @@ export class VkOauthService {
   private openAuthDialog(): Promise<void> {
     return new Promise((resolve, reject) => {
 
-      const appId = 7158730;
+
       // const redirectUri = 'http://sdal.pw/api/touch/oauth';
       const redirectUri = `${environment.backendOrigin}/api/touch/oauth`;
-
       // tslint:disable-next-line: max-line-length
-      const dialog = window.open(`https://oauth.vk.com/authorize?client_id=${appId}&redirect_uri=${redirectUri}&scope=offline&response_type=code&v=5.101&state=${this.session.guid}`, 'oauth',
+      const dialog = window.open(`https://oauth.vk.com/authorize?client_id=${environment.vkAppId}&redirect_uri=${redirectUri}&scope=offline&response_type=code&v=5.101&state=${this.session.guid}`, 'oauth',
         'width=800,height=400');
       function checkRecursively() {
         if (!dialog || dialog.closed) {

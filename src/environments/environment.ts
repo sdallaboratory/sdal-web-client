@@ -9,6 +9,7 @@ export const environment = {
   backendOrigin: 'http://localhost:3000',
   // backendOrigin: 'http://sergsol.sdal.pw:3000',
   // backendOrigin: 'http://sdal.pw',
+  vkAppId: 7178114,
 };
 
 /*
@@ -19,4 +20,3 @@ export const environment = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
-  
