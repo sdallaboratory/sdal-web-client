@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  backendOrigin: 'http://sdal.pw',
+  backendOrigin: 'https://sdal.pw',
   vkAppId: 7178114,
 };

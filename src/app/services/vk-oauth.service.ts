@@ -48,7 +48,7 @@ export class VkOauthService {
     return new Promise((resolve, reject) => {
 
 
-      // const redirectUri = 'http://sdal.pw/api/touch/oauth';
+      // const redirectUri = 'https://sdal.pw/api/touch/oauth';
       const redirectUri = `${environment.backendOrigin}/api/touch/oauth`;
       // tslint:disable-next-line: max-line-length
       const dialog = window.open(`https://oauth.vk.com/authorize?client_id=${environment.vkAppId}&redirect_uri=${redirectUri}&scope=offline&response_type=code&v=5.101&state=${this.session.guid}`, 'oauth',
