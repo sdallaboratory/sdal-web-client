@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { map } from 'rxjs/operators';
 import { StorageService } from './storage.service';
 import { Student } from '../models/student';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,14 +14,14 @@ export class TargetsService {
 
   constructor(
     private readonly api: ApiService,
-    private readonly storage: StorageService
+    private readonly storage: StorageService,
   ) {
-    const targets = this.storage.getTargets();
-    if (targets) {
-      for (const target of targets) {
-        this.addGroup(target.group, target.students);
-      }
-    }
+    // const targets = this.storage.getTargets();
+    // if (targets) {
+    //   for (const target of targets) {
+    //     this.addGroup(target.group, target.students);
+    //   }
+    // }
   }
 
   private targets: Target[] = [];
@@ -46,7 +47,7 @@ export class TargetsService {
         target.students.push(student);
       }
       this.targetsSubject.next(this.targets);
-      this.storage.setTargets(this.targets);
+      // this.storage.setTargets(this.targets);
     } else {
       this.addGroup(student.group, [student]);
     }
@@ -74,7 +75,7 @@ export class TargetsService {
 
     this.targets.push(target);
     this.targetsSubject.next(this.targets);
-    this.storage.setTargets(this.targets);
+    // this.storage.setTargets(this.targets);
 
     return target;
   }
@@ -83,14 +84,14 @@ export class TargetsService {
     const target = this.targets.find(t => t.group === group);
     _.remove(this.targets, target);
     this.targetsSubject.next(this.targets);
-    this.storage.setTargets(this.targets);
+    // this.storage.setTargets(this.targets);
     return target;
   }
 
   public clear() {
     this.targets = [];
     this.targetsSubject.next(this.targets);
-    this.storage.setTargets(this.targets);
+    // this.storage.setTargets(this.targets);
   }
 
 }
