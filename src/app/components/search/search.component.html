@@ -3,10 +3,10 @@
 </h3>
 <mat-form-field mat-list-item>
     <button color="primary" mat-raised-button matSuffix (click)="addFirst.next(); query.value = ''"
-        *ngIf="(searchResultLength | async) == 1">
+        *ngIf="(search.groupsCount | async) == 1">
         <mat-icon>add</mat-icon> Добавить
     </button>
-    <input #query type="text" matInput (keydown.enter)="addFirst.next()" placeholder="Введите группу или студента...">
+    <input #query type="text" matInput (keydown.enter)="addFirst.next()" placeholder="Введите название группы...">
     <button mat-icon-button matSuffix (click)="query.value = ''; clear.next()"
         [style.visibility]="query.value ? 'initial' : 'hidden'">
         <mat-icon>clear</mat-icon>
@@ -14,13 +14,13 @@
     <!-- <button mat-icon-button matPrefix>
         <mat-icon>help_outlined</mat-icon>
     </button> -->
-    <mat-hint *ngIf="(searchResultLength | async) == 1">Нажмите Enter, чтобы добавить</mat-hint>
+    <mat-hint *ngIf="(search.groupsCount | async) == 1">Нажмите Enter, чтобы добавить</mat-hint>
 </mat-form-field>
 <ng-container *ngIf="search.results | async as results">
     <mat-list *ngIf="results.groups || results.students">
         <ng-container *ngIf="results.groups">
             <h3 mat-subheader>Группы</h3>
-            <mat-list-item *ngFor="let group of results.groups">
+            <mat-list-item *ngFor="let group of groups | async">
                 <mat-icon mat-list-icon>supervised_user_circle</mat-icon>
                 <h4 mat-line class="group">{{group}}</h4>
                 <button class="add-button" mat-icon-button (click)="addGroup(group)">
@@ -29,7 +29,7 @@
             </mat-list-item>
         </ng-container>
         <!-- <mat-divider></mat-divider> -->
-        <ng-container *ngIf="results.students">
+        <!-- <ng-container *ngIf="results.students">
             <h3 mat-subheader>Студенты</h3>
             <mat-list-item *ngFor="let student of results.students">
                 <img mat-list-icon [src]="student.avatar" *ngIf="student.avatar" style="transform: scale(1.7)">
@@ -41,9 +41,19 @@
                     <mat-icon>add_circle_outlined</mat-icon>
                 </button>
             </mat-list-item>
-        </ng-container>
+        </ng-container> -->
+        <mat-list-item>
+            <button mat-button *ngIf="(search.groupsCount | async) - (groups | async).length as count"
+                (click)="limitClickStream.next(true)">
+                Показать ещё {{count}}
+            </button>
+        </mat-list-item>
     </mat-list>
-    <p *ngIf="!results.groups && !results.students">
+
+    <p *ngIf="!results.groups && !query.value">
+        Введите запрос, чтобы найти группы
+    </p>
+    <p *ngIf="!results.groups && query.value">
         По вашему запросу ничего не найдено. Скорее всего, расписание искомой группы или студента отсутсвует в
         электоронном университете.
     </p>

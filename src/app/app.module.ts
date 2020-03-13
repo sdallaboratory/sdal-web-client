@@ -26,6 +26,8 @@ import { AboutModalComponent } from './components/about-modal/about-modal.compon
 import { WeekPipe } from './pipes/week.pipe';
 import { TimeRangePipe } from './pipes/time-range.pipe';
 import { VkOauthComponent } from './components/vk-oauth/vk-oauth.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -55,6 +57,7 @@ import { VkOauthComponent } from './components/vk-oauth/vk-oauth.component';
     FormsModule,
     HttpClientModule,
     MaterialImportsModule,
+    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptorService, multi: true },

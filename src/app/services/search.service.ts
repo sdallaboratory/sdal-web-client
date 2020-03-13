@@ -20,13 +20,20 @@ export class SearchService {
 
   // private change = merge(this.query, this.targets.targetsObservable);
 
-  public readonly groups = this.query.pipe(
+  public readonly searchedGroups = this.query.pipe(
     map(normalizeText),
     map(q => ([...this.groupsService.names].filter(g => g.includes(q)))),
     combineLatest(this.targets.targetsObservable), // TODO: Check this
     map(([groups, targets]) => groups.filter(g => !targets || !targets.map(t => t.group).includes(g))),
-    map(groups => _.take(groups, 8)),
+  );
+
+  public readonly groups = this.searchedGroups.pipe(
+    // map(groups => _.take(groups, 8)),
     map(groups => groups.length ? groups : null),
+  );
+
+  public readonly groupsCount = this.searchedGroups.pipe(
+    map(groups => groups.length),
   );
 
   // TODO: Handle update on targets

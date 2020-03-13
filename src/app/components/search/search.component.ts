@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
-import { merge, fromEvent, Subject } from 'rxjs';
+import { merge, fromEvent, Subject, combineLatest, BehaviorSubject } from 'rxjs';
 import { map, distinct, distinctUntilChanged, debounceTime, mergeMap, first } from 'rxjs/operators';
 import { SearchService } from 'src/app/services/search.service';
 import { TargetsService } from 'src/app/services/targets.service';
+import _ from 'lodash';
 
 @Component({
   selector: 'sdal-search',
@@ -30,12 +31,23 @@ export class SearchComponent implements OnInit, AfterViewInit {
       } else if (students && students.length) {
         this.targets.addStudent(students[0]);
       }
-    })
+    });
   }
 
-  public searchResultLength = this.search.results.pipe(
-    map(({ groups, students }) => (groups && groups.length || 0) + (students && students.length || 0)),
+  public limitClickStream = new BehaviorSubject(false);
+
+  public groups = combineLatest(
+    this.search.groups,
+    this.limitClickStream.pipe(
+      map(showAll => showAll ? Infinity : 8),
+    )
+  ).pipe(
+    map(([groups, limit]) => _.take(groups, limit)),
   );
+
+  // public searchResultLength = this.search.results.pipe(
+  //   map(({ groups, students }) => (groups && groups.length || 0) + (students && students.length || 0)),
+  // );
 
   ngOnInit() {
   }
@@ -54,6 +66,12 @@ export class SearchComponent implements OnInit, AfterViewInit {
   public addGroup(group: string) {
     this.targets.addGroup(group);
   }
+
+
+
+  // public onClick() {
+  //   this.
+  // }
 
 
 }
