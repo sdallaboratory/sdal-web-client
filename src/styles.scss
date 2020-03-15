@@ -10,6 +10,10 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+* {
+    user-select: none;
+}
+
 // sdal-home {
 //     transition: 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
 // }

@@ -17,13 +17,13 @@
     <mat-hint *ngIf="(search.groupsCount | async) == 1">Нажмите Enter, чтобы добавить</mat-hint>
 </mat-form-field>
 <ng-container *ngIf="search.results | async as results">
-    <mat-list *ngIf="results.groups || results.students">
+    <mat-action-list *ngIf="results.groups || results.students">
         <ng-container *ngIf="results.groups">
             <h3 mat-subheader>Группы</h3>
-            <mat-list-item *ngFor="let group of groups | async">
+            <mat-list-item *ngFor="let group of groups | async" (click)="addGroup(group)">
                 <mat-icon mat-list-icon>supervised_user_circle</mat-icon>
                 <h4 mat-line class="group">{{group}}</h4>
-                <button class="add-button" mat-icon-button (click)="addGroup(group)">
+                <button class="add-button" mat-icon-button>
                     <mat-icon>add_circle_outlined</mat-icon>
                 </button>
             </mat-list-item>
@@ -48,7 +48,7 @@
                 Показать ещё {{count}}
             </button>
         </mat-list-item>
-    </mat-list>
+    </mat-action-list>
 
     <p *ngIf="!results.groups && !query.value">
         Введите запрос, чтобы найти группы

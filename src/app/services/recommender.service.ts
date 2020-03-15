@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ScheduleService } from './schedule.service';
-import { CombinedDaySchedule, FullLesson, Lesson, ScheduleTimeSlot } from '../models/schedule-models';
+import { CombinedDaySchedule, FullLesson, Lesson, ScheduleTimeSlot, CombinedWeekSchedule } from '../models/schedule-models';
 import { map, tap } from 'rxjs/operators';
 import _ from 'lodash';
 import { Option, ScoredOption } from '../models/recommendations-models';
@@ -10,6 +10,7 @@ import { enumerate } from '../utils/lang/enumerate';
 import { randomElement } from '../utils/random-element';
 import { NowTimeService } from './now-time.service';
 import { WeekPipe } from '../pipes/week.pipe';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +20,13 @@ export class RecommenderService {
   constructor(
     private readonly schedule: ScheduleService,
     private readonly nowTime: NowTimeService
-  ) { }
+  ) {
+    this.schedule.combinedSchedule.subscribe(async s => setTimeout(() => this.combinedSchedule.next(s)));
+  }
 
-  public readonly options = this.schedule.combinedSchedule.pipe(
+  public readonly combinedSchedule = new Subject<CombinedWeekSchedule[] | null>();
+
+  public readonly options = this.combinedSchedule.pipe(
     map(s => s || []),
     map(s => s.length <= 1 ? [] : s),
     map(s => _.flatten(s.map(d => d.days))),
