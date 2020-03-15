@@ -16,7 +16,7 @@ export class InitService {
 
   constructor(
     private readonly groups: GroupsService,
-    private readonly telemetry: TelemetryService,
+    // private readonly telemetry: TelemetryService,
     private readonly theme: ThemeService,
     private readonly nowTime: NowTimeService,
     private readonly demo: DemoService,
