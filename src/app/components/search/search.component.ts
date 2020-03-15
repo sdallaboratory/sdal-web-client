@@ -60,7 +60,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
       distinctUntilChanged(),
       debounceTime(400),
       // map()
-    ).subscribe(q => this.search.query.next(q));
+    ).subscribe(q => {
+      this.search.query.next(q)
+      this.limitClickStream.next(false);
+    });
   }
 
   public addGroup(group: string) {
