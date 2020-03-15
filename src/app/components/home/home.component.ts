@@ -33,7 +33,8 @@ export class HomeComponent implements OnInit {
     this.responsive.mobile,
     this.target.targetsObservable,
   ).pipe(
-    map(([isMobile, targets]) => !(isMobile && targets && targets.length))
+    map(([isMobile, targets]) => !(isMobile && targets && targets.length)),
+    first(),
   );
 
 

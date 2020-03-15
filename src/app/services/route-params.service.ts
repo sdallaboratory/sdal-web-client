@@ -24,7 +24,7 @@ export class RouteParamsService {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: groups.length && { groups } || {},
-      queryParamsHandling: 'merge',
+      // queryParamsHandling: 'merge',
     });
   }
 

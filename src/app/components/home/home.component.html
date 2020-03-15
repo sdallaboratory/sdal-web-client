@@ -4,7 +4,7 @@
         class="mat-elevation-z6">
         <div class="scroll-box">
             <button mat-mini-fab (click)="snav.toggle()" class="close-button">
-                <mat-icon>chevron_left</mat-icon>
+                <mat-icon>{{ (responsive.mobile | async) ? 'chevron_right' : 'chevron_left' }} </mat-icon>
             </button>
             <div class="touch-logo-wrapper">
                 <img src="assets/logo/touch-logo.svg" alt="SDAL Touch" class="touch-logo">
