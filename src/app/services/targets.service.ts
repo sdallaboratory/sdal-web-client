@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, of, timer, timer } from 'rxjs';
+import { BehaviorSubject, of, timer } from 'rxjs';
 import { Target } from '../models/target';
 import { ApiService } from './api.service';
 import _ from 'lodash';

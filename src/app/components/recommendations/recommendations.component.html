@@ -1,18 +1,18 @@
 <div class="wrapper" *ngIf="recommender.options | async as options">
     <h3 mat-subheader>Рекомендации</h3>
-    <mat-list>
-        <ng-container *ngFor="let option of options; index as i">
-            <div *ngIf="full || i < 3" class="list-item" (click)="move(option)">
-                <!-- [style.color]="'rgb(' + (250 - option.score * 5) +','+ option.score*5 +',0)'" -->
-                <mat-icon class="item-icon">{{option.score | scoreIcon}}</mat-icon>
-                <div class="option">
-                    <!-- href="#{{option.week + '-' + option.day}}"> -->
-                    {{option | option : false}}
-                </div>
-                <br>
+    <!-- <mat-list> -->
+    <ng-container *ngFor="let option of options; index as i">
+        <mat-card *ngIf="full || i < 3" class="list-item" (click)="move(option)">
+            <!-- [style.color]="'rgb(' + (250 - option.score * 5) +','+ option.score*5 +',0)'" -->
+            <mat-icon class="item-icon">{{option.score | scoreIcon}}</mat-icon>
+            <div class="option">
+                <!-- href="#{{option.week + '-' + option.day}}"> -->
+                {{option | option : false}}
             </div>
-        </ng-container>
-    </mat-list>
+            <br>
+        </mat-card>
+    </ng-container>
+    <!-- </mat-list> -->
     <p>
         <mat-slide-toggle [(ngModel)]="full">Подробные рекомендации</mat-slide-toggle>
     </p>
