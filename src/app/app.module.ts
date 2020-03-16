@@ -54,12 +54,12 @@ import { InStoragePipe } from './pipes/in-storage.pipe';
   ],
   imports: [
     BrowserModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     MaterialImportsModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptorService, multi: true },
