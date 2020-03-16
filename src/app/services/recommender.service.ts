@@ -26,14 +26,25 @@ export class RecommenderService {
 
   public readonly combinedSchedule = new Subject<CombinedWeekSchedule[] | null>();
 
+  private readonly daysOrder = new Map<string, number>([
+    ['пн', 1],
+    ['вт', 2],
+    ['ср', 3],
+    ['чт', 4],
+    ['пт', 5],
+    ['сб', 6],
+  ]);
+
   public readonly options = this.combinedSchedule.pipe(
     map(s => s || []),
     map(s => s.length <= 1 ? [] : s),
     map(s => _.flatten(s.map(d => d.days))),
+    map(days => days.filter(day => !this.isPassed(day))),
     map(days => _.flatten(days.map(this.buildOptions.bind(this)))),
     map(options => options.map(o => this.scoreOption(o))),
     map(options => options.filter(o => o.score > 0)),
     map(options => _.orderBy(options, o => -o.score)),
+    map(options => options.filter(o => o.week !== this.nowTime.currentWeek.weekName)),
     map(options => options.length ? options : null),
   );
 
@@ -47,8 +58,15 @@ export class RecommenderService {
     вс: 'в воскресение',
   } as { [day: string]: string };
 
-  private isSlotFree(slot: ScheduleTimeSlot | undefined) {
+  private isPassed(day: CombinedDaySchedule) {
+    const week = day.timeSlots[0].groupsLessons[0].week;
+    const dayOrder = this.daysOrder.get(day.dayName) || 0;
+    const todayOrder = this.daysOrder.get(this.nowTime.today) || 0;
+    console.log(dayOrder, todayOrder);
+    return week === this.nowTime.currentWeek.weekName && dayOrder < todayOrder;
+  }
 
+  private isSlotFree(slot: ScheduleTimeSlot | undefined) {
     return !slot || slot.groupsLessons.every(l => !l.name);
   }
 

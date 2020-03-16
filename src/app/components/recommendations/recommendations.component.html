@@ -2,7 +2,7 @@
     <h3 mat-subheader>Рекомендации</h3>
     <mat-list>
         <ng-container *ngFor="let option of options; index as i">
-            <div *ngIf="full || i < 3" class="list-item" (click)="move(option.week + '-' + option.day)">
+            <div *ngIf="full || i < 3" class="list-item" (click)="move(option)">
                 <!-- [style.color]="'rgb(' + (250 - option.score * 5) +','+ option.score*5 +',0)'" -->
                 <mat-icon class="item-icon">{{option.score | scoreIcon}}</mat-icon>
                 <div class="option">

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RecommenderService } from 'src/app/services/recommender.service';
 import _ from 'lodash';
+import { Option } from '../../models/recommendations-models';
 
 @Component({
   selector: 'sdal-recommendations',
@@ -23,9 +24,9 @@ export class RecommendationsComponent implements OnInit {
   ngOnInit() {
   }
 
-  public move(hash: string) {
-    location.hash = '';
-    location.hash = hash;
+  public move(option: Option) {
+    const timeRange = option.timeRange.replace(' - ', '-');
+    location.hash = `${option.week}-${option.day}-${timeRange}`;
   }
 
 }

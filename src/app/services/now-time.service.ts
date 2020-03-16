@@ -3,7 +3,7 @@ import { ApiService } from './api.service';
 import { WeekInfo } from '../models/schedule-models';
 import { repeatWhen } from 'rxjs/operators';
 import { interval } from 'rxjs/internal/observable/interval';
-import { getDayFromNuber, DayNumber } from '../utils/day-from-number';
+import { getDayFromNuber as getDayFromNumer, DayNumber } from '../utils/day-from-number';
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +27,13 @@ export class NowTimeService {
     ).subscribe(week => {
       this.currentWeek = week;
     });
+    // if (!location.hash) {
+    //   const hash = `#${this.currentWeek}-${this.today}`;
+    //   window.location.hash = hash;
+    // }
   }
 
   setThisDay() {
-    this.today = getDayFromNuber(new Date().getDay() as DayNumber);
+    this.today = getDayFromNumer(new Date().getDay() as DayNumber);
   }
 }

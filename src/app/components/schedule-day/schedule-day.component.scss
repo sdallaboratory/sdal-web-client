@@ -30,6 +30,10 @@ td {
 }
 
 .today {
-    // background: pink;
+    background: #4debff45;
     // box-shadow: 0 3px 25px #cc99ffaa;
+}
+
+.selected {
+    filter: invert(1);
 }
