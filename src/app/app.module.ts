@@ -54,7 +54,7 @@ import { InStoragePipe } from './pipes/in-storage.pipe';
   ],
   imports: [
     BrowserModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production }),
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
