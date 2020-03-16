@@ -20,7 +20,7 @@ export class InitService {
     private readonly theme: ThemeService,
     private readonly nowTime: NowTimeService,
     private readonly demo: DemoService,
-    private readonly auth: VkOauthService,
+    // private readonly auth: VkOauthService,
   ) { }
 
   /**
@@ -37,7 +37,7 @@ export class InitService {
         this.groups.init(),
         this.nowTime.init(),
         this.demo.init(),
-        this.auth.init(),
+        // this.auth.init(),
       ]);
       console.log('Приложение было успешно инициализировано.');
     } catch {
