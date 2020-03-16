@@ -24,9 +24,9 @@ export class SearchService {
   public readonly searchedGroups = this.query.pipe(
     map(normalizeText),
     map(q => ([...this.groupsService.names].filter(g => g.includes(q)))),
-    map(groups => _.orderBy(groups, group => this.history.history.get(group) || 0, 'desc')),
     combineLatest(this.targets.targetsObservable), // TODO: Check this
     map(([groups, targets]) => groups.filter(g => !targets || !targets.map(t => t.group).includes(g))),
+    map(groups => _.orderBy(groups, group => this.history.history.get(group) || 0, 'desc')),
   );
 
   public readonly groups = this.searchedGroups.pipe(
