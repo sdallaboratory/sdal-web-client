@@ -13,7 +13,7 @@ import { HistoryService } from '../../services/history.service';
 })
 export class SearchComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('query', { static: false })
+  @ViewChild('query')
   private queryElem!: ElementRef<HTMLInputElement>;
 
   public readonly addFirst = new Subject();
