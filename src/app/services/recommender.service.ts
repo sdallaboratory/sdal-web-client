@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ScheduleService } from './schedule.service';
 import { CombinedDaySchedule, FullLesson, Lesson, ScheduleTimeSlot, CombinedWeekSchedule } from '../models/schedule-models';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, combineLatest } from 'rxjs/operators';
 import _ from 'lodash';
 import { Option, ScoredOption } from '../models/recommendations-models';
 import { getCampus } from '../utils/get-campus';
@@ -11,6 +11,7 @@ import { randomElement } from '../utils/random-element';
 import { NowTimeService } from './now-time.service';
 import { WeekPipe } from '../pipes/week.pipe';
 import { Subject } from 'rxjs';
+import { TargetsService } from './targets.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class RecommenderService {
 
   constructor(
     private readonly schedule: ScheduleService,
-    private readonly nowTime: NowTimeService
+    private readonly nowTime: NowTimeService,
+    private readonly targets: TargetsService,
   ) {
     this.schedule.combinedSchedule.subscribe(async s => setTimeout(() => this.combinedSchedule.next(s)));
   }
@@ -37,7 +39,9 @@ export class RecommenderService {
 
   public readonly options = this.combinedSchedule.pipe(
     map(s => s || []),
-    map(s => s.length <= 1 ? [] : s),
+    tap(a => console.log(a)),
+    combineLatest(this.targets.targetsObservable),
+    map(([s, targets]) => targets && targets.length <= 1 ? [] : s),
     map(s => _.flatten(s.map(d => d.days))),
     map(days => days.filter(day => !this.isPassed(day))),
     map(days => _.flatten(days.map(this.buildOptions.bind(this)))),

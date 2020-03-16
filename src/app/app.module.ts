@@ -30,8 +30,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { InStoragePipe } from './pipes/in-storage.pipe';
 
-console.log(environment);
-
 @NgModule({
   declarations: [
     AppComponent,
