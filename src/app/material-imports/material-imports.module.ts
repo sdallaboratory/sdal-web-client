@@ -28,7 +28,6 @@ const imports = [
 ];
 
 @NgModule({
-  declarations: [],
   imports,
   exports: imports,
 })
