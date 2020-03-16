@@ -44,7 +44,6 @@ export class RecommenderService {
     map(options => options.map(o => this.scoreOption(o))),
     map(options => options.filter(o => o.score > 0)),
     map(options => _.orderBy(options, o => -o.score)),
-    map(options => options.filter(o => o.week !== this.nowTime.currentWeek.weekName)),
     map(options => options.length ? options : null),
   );
 
@@ -62,7 +61,7 @@ export class RecommenderService {
     const week = day.timeSlots[0].groupsLessons[0].week;
     const dayOrder = this.daysOrder.get(day.dayName) || 0;
     const todayOrder = this.daysOrder.get(this.nowTime.today) || 0;
-    console.log(dayOrder, todayOrder);
+    return false;
     return week === this.nowTime.currentWeek.weekName && dayOrder < todayOrder;
   }
 

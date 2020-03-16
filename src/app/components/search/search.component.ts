@@ -4,6 +4,7 @@ import { map, distinct, distinctUntilChanged, debounceTime, mergeMap, first } fr
 import { SearchService } from 'src/app/services/search.service';
 import { TargetsService } from 'src/app/services/targets.service';
 import _ from 'lodash';
+import { HistoryService } from '../../services/history.service';
 
 @Component({
   selector: 'sdal-search',
@@ -21,7 +22,8 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
   constructor(
     public readonly search: SearchService,
-    public readonly targets: TargetsService
+    public readonly targets: TargetsService,
+    public readonly history: HistoryService,
   ) {
     this.addFirst.pipe(
       mergeMap(() => search.results.pipe(first())),
@@ -61,7 +63,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
       debounceTime(400),
       // map()
     ).subscribe(q => {
-      this.search.query.next(q)
+      this.search.query.next(q);
       this.limitClickStream.next(false);
     });
   }

@@ -28,6 +28,7 @@ import { TimeRangePipe } from './pipes/time-range.pipe';
 import { VkOauthComponent } from './components/vk-oauth/vk-oauth.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { InStoragePipe } from './pipes/in-storage.pipe';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { environment } from '../environments/environment';
     AboutModalComponent,
     WeekPipe,
     TimeRangePipe,
-    VkOauthComponent
+    VkOauthComponent,
+    InStoragePipe
   ],
   imports: [
     BrowserModule,

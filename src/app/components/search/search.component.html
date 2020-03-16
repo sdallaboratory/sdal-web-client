@@ -23,7 +23,9 @@
             <mat-list-item *ngFor="let group of groups | async" (click)="addGroup(group)">
                 <mat-icon mat-list-icon>supervised_user_circle</mat-icon>
                 <h4 mat-line class="group">{{group}}</h4>
-                <button class="add-button" mat-icon-button>
+                <mat-icon class="cached" *ngIf="group | inStorage"
+                    matTooltip="Расписание группы закешировано и доступно оффлайн">cached</mat-icon>
+                <button class="add-button" mat-icon-button matTooltip="Добавить группу к сравнению">
                     <mat-icon>add_circle_outlined</mat-icon>
                 </button>
             </mat-list-item>

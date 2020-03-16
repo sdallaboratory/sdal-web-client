@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of, timer, timer } from 'rxjs';
 import { Target } from '../models/target';
 import { ApiService } from './api.service';
 import _ from 'lodash';
-import { map } from 'rxjs/operators';
+import { map, retry, retryWhen, delayWhen } from 'rxjs/operators';
 import { StorageService } from './storage.service';
 import { Student } from '../models/student';
 
@@ -59,7 +59,17 @@ export class TargetsService {
       return existedTarget;
     }
 
-    const schedulePromise = this.api.getSchedule(group).toPromise();
+    const cahcedSchedule = this.storage.getGroupSchedule(group);
+    const schedulePromise = cahcedSchedule && of(cahcedSchedule).toPromise()
+      || this.api.getSchedule(group).pipe(
+        retryWhen(errors => errors.pipe(
+          delayWhen(() => timer(10000))
+        )),
+      ).toPromise();
+
+    if (!cahcedSchedule) {
+      schedulePromise.then(schedule => this.storage.setGroupSchedule(schedule));
+    }
 
     const target: Target = {
       group,

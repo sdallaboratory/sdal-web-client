@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StoredTarget, Target } from '../models/target';
 import { ApiService } from './api.service';
+import { GroupSchedule } from '../models/schedule-models';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,11 @@ export class StorageService {
     private readonly api: ApiService,
   ) { }
 
-  private readonly targetsKey = 'targets';
-  private readonly groupsKey = 'groups';
-  private readonly userKey = 'user';
-  private readonly themeKey = 'theme';
+  private readonly targetsKey = 'touch:targets';
+  private readonly groupsKey = 'touch:groups';
+  private readonly userKey = 'touch:user';
+  private readonly themeKey = 'touch:theme';
+  private readonly historyKey = 'touch:history';
 
   private set<T>(key: string, obj: T) {
     const stringified = JSON.stringify(obj);
@@ -43,6 +45,16 @@ export class StorageService {
     return this.get<string[]>(this.groupsKey);
   }
 
+  public setHistory(history: Map<string, number>) {
+    const pairs = [...history.entries()];
+    this.set(this.historyKey, pairs);
+  }
+
+  public getHistory() {
+    const pairs = this.get<Array<[string, number]>>(this.historyKey) || [];
+    return new Map(pairs);
+  }
+
   public setUser(userInfo: any) {
     this.set(this.userKey, userInfo);
   }
@@ -57,5 +69,20 @@ export class StorageService {
 
   public getTheme() {
     return this.get(this.themeKey);
+  }
+
+  public setGroupSchedule(schedule: GroupSchedule) {
+    const key = `touch:group:${schedule.name}`;
+    return this.set(key, schedule);
+  }
+
+  public getGroupSchedule(group: string) {
+    const key = `touch:group:${group}`;
+    return this.get<GroupSchedule>(key);
+  }
+
+  public hasGroupSchedule(group: string) {
+    const key = `touch:group:${group}`;
+    return localStorage.getItem(key) != null;
   }
 }

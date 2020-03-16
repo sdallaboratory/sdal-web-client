@@ -16,7 +16,6 @@ export class AppComponent {
     private readonly route: ActivatedRoute,
     private readonly params: RouteParamsService,
   ) {
-    console.log(route, params['route']);
     params.init();
   }
 
