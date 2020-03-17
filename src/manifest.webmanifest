@@ -1,8 +1,8 @@
 {
-  "name": "touch",
-  "short_name": "touch",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "SDAL Touch",
+  "short_name": "Touch",
+  "theme_color": "#00d7ff",
+  "background_color": "#00d7ff",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
