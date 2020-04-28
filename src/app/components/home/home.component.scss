@@ -47,7 +47,12 @@ mat-sidenav-content {
     flex-direction: column;
 
     sdal-lesson-details {
-        flex: none;
+        user-select: none;
+        touch-action: none;
+        position: sticky;
+        bottom: 0;
+        position: -webkit-sticky;
+        z-index: 150;
     }
 
     .scroll-box {

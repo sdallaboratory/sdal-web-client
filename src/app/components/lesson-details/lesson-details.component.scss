@@ -1,10 +1,12 @@
 :host {
     display: flex;
     justify-content: center;
+    pointer-events: none;
 }
 
 mat-card {
     flex: 0 1 500px;
+    pointer-events: all;
 
     mat-card-header {
         display: flex;

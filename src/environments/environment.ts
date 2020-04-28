@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  // backendOrigin: 'http://95.216.188.201',
+  backendOrigin: 'http://95.216.188.201:3000',
   // backendOrigin: 'http://78.107.233.19:3000',
-  backendOrigin: 'http://localhost:3000',
+  // backendOrigin: 'http://localhost:3000',
   // backendOrigin: 'http://sergsol.sdal.pw:3000',
   // backendOrigin: 'https://sdal.pw',
   vkAppId: 7178114,

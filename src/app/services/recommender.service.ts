@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ScheduleService } from './schedule.service';
 import { CombinedDaySchedule, FullLesson, Lesson, ScheduleTimeSlot, CombinedWeekSchedule } from '../models/schedule-models';
-import { map, tap, combineLatest } from 'rxjs/operators';
+import { map, tap, combineLatest, shareReplay } from 'rxjs/operators';
 import _ from 'lodash';
 import { Option, ScoredOption } from '../models/recommendations-models';
 import { getCampus } from '../utils/get-campus';
@@ -39,7 +39,7 @@ export class RecommenderService {
 
   public readonly options = this.combinedSchedule.pipe(
     map(s => s || []),
-    tap(a => console.log(a)),
+    // tap(a => console.log('recomputing', a)),
     combineLatest(this.targets.targetsObservable),
     map(([s, targets]) => targets && targets.length <= 1 ? [] : s),
     map(s => _.flatten(s.map(d => d.days))),
@@ -49,6 +49,7 @@ export class RecommenderService {
     map(options => options.filter(o => o.score > 0)),
     map(options => _.orderBy(options, o => -o.score)),
     map(options => options.length ? options : null),
+    shareReplay(1),
   );
 
   daysCase = {
@@ -65,7 +66,7 @@ export class RecommenderService {
     const week = day.timeSlots[0].groupsLessons[0].week;
     const dayOrder = this.daysOrder.get(day.dayName) || 0;
     const todayOrder = this.daysOrder.get(this.nowTime.today) || 0;
-    return false;
+    // return false;
     return week === this.nowTime.currentWeek.weekName && dayOrder < todayOrder;
   }
 
