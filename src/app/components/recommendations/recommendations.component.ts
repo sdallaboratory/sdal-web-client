@@ -16,17 +16,13 @@ export class RecommendationsComponent implements OnInit {
     public readonly recommender: RecommenderService
   ) { }
 
-  // public top = this.recommender.options.pipe(
-  //   combineLatest(this.full)
-  //   map(top => _.take(top, 3)),
-  // );
-
   ngOnInit() {
   }
 
   public move(option: Option) {
     const timeRange = option.timeRange.replace(' - ', '-');
-    location.hash = `${option.week}-${option.day}-${timeRange}`;
+    location.hash = '';
+    setTimeout(() => location.hash = `${option.week}-${option.day}-${timeRange}`, 50);
   }
 
 }

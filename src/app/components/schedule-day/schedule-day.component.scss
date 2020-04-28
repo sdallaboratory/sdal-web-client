@@ -18,8 +18,8 @@ table {
 
 td {
     border: 3px solid transparent;
+    touch-action: initial !important;
     &.group-lesson {
-        // word-break: break-all;
         overflow: hidden;
         text-overflow: ellipsis;
 
@@ -30,8 +30,7 @@ td {
 }
 
 .today {
-    background: #4debff45;
-    // box-shadow: 0 3px 25px #cc99ffaa;
+    background: #88f1ff45;
 }
 
 .selected {

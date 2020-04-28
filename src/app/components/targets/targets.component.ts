@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TargetsService } from 'src/app/services/targets.service';
+import { ResponsiveService } from '../../services/responsive.service';
 
 @Component({
   selector: 'sdal-targets',
@@ -9,7 +10,8 @@ import { TargetsService } from 'src/app/services/targets.service';
 export class TargetsComponent implements OnInit {
 
   constructor(
-    public readonly targets: TargetsService
+    public readonly targets: TargetsService,
+    public readonly responsive: ResponsiveService
   ) { }
 
   ngOnInit() {

@@ -57,3 +57,7 @@ mat-dialog-container {
 mat-sidenav {
     border: none !important;
 }
+
+input {
+    -webkit-user-select: all !important;
+}

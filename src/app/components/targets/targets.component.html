@@ -32,7 +32,7 @@
                     ({{students[0].name}}<ng-container *ngIf="students.length > 1">
                         и ещё {{students.length - 1}}</ng-container>)
                 </span>
-                <button class="add-button" mat-icon-button (click)="targets.removeGroup(target.group)">
+                <button class="add-button" mat-icon-button (click)="targets.removeGroup(target.group)" (click)="1+1">
                     <mat-icon>clear</mat-icon>
                 </button>
             </mat-list-item>

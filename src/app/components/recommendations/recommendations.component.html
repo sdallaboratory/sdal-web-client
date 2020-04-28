@@ -1,4 +1,4 @@
-<div class="wrapper" *ngIf="recommender.options | async as options">
+<div mat-button class="wrapper" *ngIf="recommender.options | async as options">
     <h3 mat-subheader>Рекомендации</h3>
     <ng-container *ngFor="let option of options; index as i">
         <mat-card *ngIf="full || i < 3" class="list-item" (click)="move(option)">

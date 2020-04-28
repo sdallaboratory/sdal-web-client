@@ -1,5 +1,6 @@
 <h3 mat-subheader>
-    Найти расписания
+    {{(targets.targetsObservable | async)?.length ? 'Добавить группы в сравнение' : 'Найти расписания групп'}}
+
 </h3>
 <mat-form-field mat-list-item>
     <button color="primary" mat-raised-button matSuffix (click)="addFirst.next(); query.value = '';"
@@ -55,7 +56,7 @@
         Введите запрос, чтобы найти группы
     </p>
     <p *ngIf="!results.groups && query.value">
-        По вашему запросу ничего не найдено. Скорее всего, расписание искомой группы или студента отсутсвует в
+        По вашему запросу ничего не найдено. Скорее всего, расписание искомой группы отсутсвует в
         электоронном университете.
     </p>
 </ng-container>

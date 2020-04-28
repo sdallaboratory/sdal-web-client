@@ -9,11 +9,14 @@
 .list-item {
     display: flex;
     align-items: center;
+    cursor: pointer;
+    &:hover {
+        filter: invert(0.2);
+    }
     .option {
         padding: 10px;
         color: inherit;
         text-decoration: none;
-        cursor: pointer;
     }
 }
 

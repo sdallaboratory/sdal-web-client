@@ -5,6 +5,7 @@ import { SearchService } from 'src/app/services/search.service';
 import { TargetsService } from 'src/app/services/targets.service';
 import _ from 'lodash';
 import { HistoryService } from '../../services/history.service';
+import { ResponsiveService } from '../../services/responsive.service';
 
 @Component({
   selector: 'sdal-search',
@@ -23,6 +24,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   constructor(
     public readonly search: SearchService,
     public readonly targets: TargetsService,
+    public readonly responsive: ResponsiveService,
     public readonly history: HistoryService,
   ) {
     this.addFirst.pipe(
