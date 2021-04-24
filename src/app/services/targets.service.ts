@@ -24,9 +24,11 @@ export class TargetsService {
     if (!targets) {
       return;
     }
-    for (const target of targets) {
-      this.addGroup(target.group, target.students);
-    }
+    setTimeout(() => { // Чтобы успел подписаться метод обработки параметров роута
+      for (const target of targets) {
+        this.addGroup(target.group, target.students);
+      }
+    });
   }
 
   private targets: Target[] = [];
