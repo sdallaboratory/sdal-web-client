@@ -5,7 +5,7 @@
 <mat-form-field mat-list-item>
     <button color="primary" mat-raised-button matSuffix (click)="addFirst.next(); query.value = '';"
         *ngIf="(search.groupsCount | async) == 1">
-        <mat-icon>add</mat-icon> Добавить
+        <mat-icon>add</mat-icon> Добавить {{(search.results | async).groups[0]}}
     </button>
     <input #query type="text" matInput (keydown.enter)="addFirst.next()" placeholder="Введите название группы...">
     <button mat-icon-button matSuffix (click)="query.value = ''; clear.next()"
@@ -24,6 +24,7 @@
             <mat-list-item *ngFor="let group of groups | async" (click)="addGroup(group)">
                 <mat-icon mat-list-icon>supervised_user_circle</mat-icon>
                 <h4 mat-line class="group">{{group}}</h4>
+                <!-- <span mat-line >{{history.history.get(group)}} {{((history.history.get(group) || 0) % 10) | i18nPlural : {'=0': 'No messages.', '=1': 'One message.', 'other': '# messages.'}}}</span> -->
                 <mat-icon class="cached" *ngIf="group | inStorage"
                     matTooltip="Расписание группы закешировано и доступно оффлайн">cached</mat-icon>
                 <button class="add-button" mat-icon-button matTooltip="Добавить группу к сравнению">

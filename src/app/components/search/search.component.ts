@@ -6,6 +6,7 @@ import { TargetsService } from 'src/app/services/targets.service';
 import _ from 'lodash';
 import { HistoryService } from '../../services/history.service';
 import { ResponsiveService } from '../../services/responsive.service';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'sdal-search',
@@ -26,6 +27,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     public readonly targets: TargetsService,
     public readonly responsive: ResponsiveService,
     public readonly history: HistoryService,
+    private readonly storage: StorageService,
   ) {
     this.addFirst.pipe(
       mergeMap(() => search.results.pipe(first())),
