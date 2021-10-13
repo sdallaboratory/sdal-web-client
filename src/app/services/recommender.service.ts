@@ -64,7 +64,7 @@ export class RecommenderService {
   );
 
   public readonly options = fromWorker<RecommenderWorkerData, ScoredOption[]>(
-    () => new Worker('../workers/options.worker.ts', { type: 'module' }), this.optionsPrep
+    () => new Worker('../workers/recommender.worker.ts', { type: 'module' }), this.optionsPrep
   )
 
   daysCase = {
