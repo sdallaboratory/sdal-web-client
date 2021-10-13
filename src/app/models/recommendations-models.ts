@@ -1,4 +1,4 @@
-import { FullLesson } from './schedule-models';
+import { CombinedWeekSchedule, FullLesson } from './schedule-models';
 
 export interface LessonsMap {
     [group: string]: FullLesson;
@@ -33,3 +33,10 @@ export interface Option {
 export interface ScoredOption extends Option {
     score: number;
 }
+
+export interface RecommenderWorkerData {
+    today: string;
+    currentWeekName: string;
+    schedules: CombinedWeekSchedule[];
+}
+
