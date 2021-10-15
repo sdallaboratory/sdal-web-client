@@ -8,7 +8,7 @@ import { CombinedDaySchedule, FullLesson, ScheduleTimeSlot } from '../models/sch
 import { Option, ScoredOption, RecommenderWorkerData } from '../models/recommendations-models';
 import { getCampus } from '../utils/get-campus';
 
-export class OptionsWorker implements DoWork<RecommenderWorkerData, ScoredOption[] | null> {
+export class RecommenderWorker implements DoWork<RecommenderWorkerData, ScoredOption[] | null> {
 
   private currentWeekName: string = '';
   private today: string = '';
@@ -236,4 +236,4 @@ export class OptionsWorker implements DoWork<RecommenderWorkerData, ScoredOption
   
 }
 
-runWorker(OptionsWorker)
+runWorker(RecommenderWorker);

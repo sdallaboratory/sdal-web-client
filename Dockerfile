@@ -7,8 +7,7 @@ RUN npm install
 
 # RUN addgroup app && adduser --system --ingroup app app
 # USER app
-RUN ng build --prod 
-#--base-href=/touch/ --deploy-url=/touch/
+RUN ng build --prod
 
 FROM nginx:1.17.4
 
