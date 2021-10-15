@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
   // backendOrigin: 'https://sdal.pw',
-  backendOrigin: 'http://localhost:3000',
+  backendOrigin: 'http://localhost',
   vkAppId: 7178114,
 };
