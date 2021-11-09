@@ -39,11 +39,8 @@ export class RecommenderService {
     ['сб', 6],
   ]);
 
-  
-
   public readonly optionsPrep = this.combinedSchedule.pipe(
     map(s => s || []),
-    // tap(a => console.log('recomputing', a)),
     combineLatest(this.targets.targetsObservable),
     map(([s, targets]) => targets && targets.length <= 1 ? [] : s),
     map(s => { 
@@ -51,8 +48,8 @@ export class RecommenderService {
         currentWeekName: this.nowTime.currentWeek.weekName,
         today: this.nowTime.today,
         schedules: s
-      } as RecommenderWorkerData
-    }),
+      } as RecommenderWorkerData;
+    })
     // map(s => _.flatten(s.map(d => d.days))),
     // map(days => days.filter(day => !this.isPassed(day))),
     // map(days => _.flatten(days.map(this.buildOptions.bind(this)))),
