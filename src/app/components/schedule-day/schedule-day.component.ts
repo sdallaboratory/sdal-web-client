@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CombinedDaySchedule, FullLesson } from 'src/app/models/schedule-models';
+import { CombinedDaySchedule, FullLesson, ScheduleTimeSlot } from 'src/app/models/schedule-models';
 import { ScheduleService } from 'src/app/services/schedule.service';
 import { NowTimeService } from 'src/app/services/now-time.service';
 
@@ -19,6 +19,10 @@ export class ScheduleDayComponent implements OnInit {
   ) { }
 
   public width = 100;
+
+  public get hash() {
+    return decodeURI(location.hash).slice(1);
+  }
 
   ngOnInit() {
     this.schedule.combinedSchedule.subscribe(s => {
@@ -45,4 +49,8 @@ export class ScheduleDayComponent implements OnInit {
     return this.day.timeSlots[0].groupsLessons.map(l => l.group);
   }
 
+  public getSlotId(slot: ScheduleTimeSlot) {
+    const range = slot.timeRange.replace(' - ', '-');
+    return `${this.id}-${range}`;
+  }
 }

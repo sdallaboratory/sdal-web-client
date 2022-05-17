@@ -15,7 +15,7 @@ $touch-light-theme: mat-light-theme($touch-primary, $touch-accent, $touch-warn);
 @include angular-material-theme($touch-light-theme);
 
 $touch-dark-accent: mat-palette($mat-purple);
-$touch-dark-theme: mat-dark-theme($touch-primary, $touch-dark-accent, $touch-warn);
+$touch-dark-theme: mat-dark-theme($touch-dark-accent, $touch-dark-accent, $touch-warn);
 
 .sdal-dark {
     @include angular-material-theme($touch-dark-theme);

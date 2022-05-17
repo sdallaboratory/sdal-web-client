@@ -12,7 +12,7 @@ export class OptionPipe implements PipeTransform {
   ) { }
 
   transform(option: Option) {
-    return this.recommender.verbalize(option)
+    return this.recommender.verbalize(option);
   }
 
 }

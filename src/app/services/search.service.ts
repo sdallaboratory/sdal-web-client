@@ -10,6 +10,7 @@ import _ from 'lodash';
 import { Student } from '../models/student';
 import { compareStudents } from '../utils/compare-students';
 import { SessionService } from './session.service';
+import { HistoryService } from './history.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,13 +21,20 @@ export class SearchService {
 
   // private change = merge(this.query, this.targets.targetsObservable);
 
-  public readonly groups = this.query.pipe(
+  public readonly searchedGroups = this.query.pipe(
     map(normalizeText),
     map(q => ([...this.groupsService.names].filter(g => g.includes(q)))),
     combineLatest(this.targets.targetsObservable), // TODO: Check this
     map(([groups, targets]) => groups.filter(g => !targets || !targets.map(t => t.group).includes(g))),
-    map(groups => _.take(groups, 8)),
+    map(groups => _.orderBy(groups, group => this.history.history.get(group) || 0, 'desc')),
+  );
+
+  public readonly groups = this.searchedGroups.pipe(
     map(groups => groups.length ? groups : null),
+  );
+
+  public readonly groupsCount = this.searchedGroups.pipe(
+    map(groups => groups.length),
   );
 
   // TODO: Handle update on targets
@@ -49,6 +57,7 @@ export class SearchService {
     private readonly groupsService: GroupsService,
     private readonly api: ApiService,
     private readonly targets: TargetsService,
+    private readonly history: HistoryService,
     private readonly session: SessionService,
   ) { }
 }

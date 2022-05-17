@@ -26,6 +26,9 @@ import { AboutModalComponent } from './components/about-modal/about-modal.compon
 import { WeekPipe } from './pipes/week.pipe';
 import { TimeRangePipe } from './pipes/time-range.pipe';
 import { VkOauthComponent } from './components/vk-oauth/vk-oauth.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { InStoragePipe } from './pipes/in-storage.pipe';
 
 @NgModule({
   declarations: [
@@ -46,10 +49,12 @@ import { VkOauthComponent } from './components/vk-oauth/vk-oauth.component';
     AboutModalComponent,
     WeekPipe,
     TimeRangePipe,
-    VkOauthComponent
+    VkOauthComponent,
+    InStoragePipe
   ],
   imports: [
     BrowserModule,
+    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production }),
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,

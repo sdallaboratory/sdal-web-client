@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://sdal.pw/",
+    "secure": true,
+    "pathRewrite": {},
+    "changeOrigin": true
+  }
+}

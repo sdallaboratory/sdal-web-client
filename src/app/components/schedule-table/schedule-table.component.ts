@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ScheduleService } from 'src/app/services/schedule.service';
 
 @Component({

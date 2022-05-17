@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ScheduleService } from './schedule.service';
-import { CombinedDaySchedule, FullLesson, Lesson, ScheduleTimeSlot } from '../models/schedule-models';
-import { map, tap } from 'rxjs/operators';
+import { CombinedDaySchedule, FullLesson, Lesson, ScheduleTimeSlot, CombinedWeekSchedule } from '../models/schedule-models';
+import { map, tap, combineLatest, shareReplay } from 'rxjs/operators';
 import _ from 'lodash';
 import { Option, ScoredOption } from '../models/recommendations-models';
 import { getCampus } from '../utils/get-campus';
@@ -10,6 +10,8 @@ import { enumerate } from '../utils/lang/enumerate';
 import { randomElement } from '../utils/random-element';
 import { NowTimeService } from './now-time.service';
 import { WeekPipe } from '../pipes/week.pipe';
+import { Subject } from 'rxjs';
+import { TargetsService } from './targets.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,18 +20,36 @@ export class RecommenderService {
 
   constructor(
     private readonly schedule: ScheduleService,
-    private readonly nowTime: NowTimeService
-  ) { }
+    private readonly nowTime: NowTimeService,
+    private readonly targets: TargetsService,
+  ) {
+    this.schedule.combinedSchedule.subscribe(async s => setTimeout(() => this.combinedSchedule.next(s)));
+  }
 
-  public readonly options = this.schedule.combinedSchedule.pipe(
+  public readonly combinedSchedule = new Subject<CombinedWeekSchedule[] | null>();
+
+  private readonly daysOrder = new Map<string, number>([
+    ['пн', 1],
+    ['вт', 2],
+    ['ср', 3],
+    ['чт', 4],
+    ['пт', 5],
+    ['сб', 6],
+  ]);
+
+  public readonly options = this.combinedSchedule.pipe(
     map(s => s || []),
-    map(s => s.length <= 1 ? [] : s),
+    // tap(a => console.log('recomputing', a)),
+    combineLatest(this.targets.targetsObservable),
+    map(([s, targets]) => targets && targets.length <= 1 ? [] : s),
     map(s => _.flatten(s.map(d => d.days))),
+    map(days => days.filter(day => !this.isPassed(day))),
     map(days => _.flatten(days.map(this.buildOptions.bind(this)))),
     map(options => options.map(o => this.scoreOption(o))),
     map(options => options.filter(o => o.score > 0)),
     map(options => _.orderBy(options, o => -o.score)),
     map(options => options.length ? options : null),
+    shareReplay(1),
   );
 
   daysCase = {
@@ -42,8 +62,15 @@ export class RecommenderService {
     вс: 'в воскресение',
   } as { [day: string]: string };
 
-  private isSlotFree(slot: ScheduleTimeSlot | undefined) {
+  private isPassed(day: CombinedDaySchedule) {
+    const week = day.timeSlots[0].groupsLessons[0].week;
+    const dayOrder = this.daysOrder.get(day.dayName) || 0;
+    const todayOrder = this.daysOrder.get(this.nowTime.today) || 0;
+    // return false;
+    return week === this.nowTime.currentWeek.weekName && dayOrder < todayOrder;
+  }
 
+  private isSlotFree(slot: ScheduleTimeSlot | undefined) {
     return !slot || slot.groupsLessons.every(l => !l.name);
   }
 

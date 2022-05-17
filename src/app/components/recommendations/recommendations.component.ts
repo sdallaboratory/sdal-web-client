@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RecommenderService } from 'src/app/services/recommender.service';
 import _ from 'lodash';
+import { Option } from '../../models/recommendations-models';
 
 @Component({
   selector: 'sdal-recommendations',
@@ -15,17 +16,13 @@ export class RecommendationsComponent implements OnInit {
     public readonly recommender: RecommenderService
   ) { }
 
-  // public top = this.recommender.options.pipe(
-  //   combineLatest(this.full)
-  //   map(top => _.take(top, 3)),
-  // );
-
   ngOnInit() {
   }
 
-  public move(hash: string) {
+  public move(option: Option) {
+    const timeRange = option.timeRange.replace(' - ', '-');
     location.hash = '';
-    location.hash = hash;
+    setTimeout(() => location.hash = `${option.week}-${option.day}-${timeRange}`, 50);
   }
 
 }

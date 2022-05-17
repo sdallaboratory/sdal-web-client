@@ -13,6 +13,10 @@ mat-list-item:not(:hover) {
     }
 }
 
+.cached {
+    opacity: 0.5;
+}
+
 mat-form-field {
     padding: 0 10px;
     // width: 100%;

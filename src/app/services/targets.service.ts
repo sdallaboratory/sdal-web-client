@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of, timer } from 'rxjs';
 import { Target } from '../models/target';
 import { ApiService } from './api.service';
 import _ from 'lodash';
-import { map } from 'rxjs/operators';
+import { map, retry, retryWhen, delayWhen } from 'rxjs/operators';
 import { StorageService } from './storage.service';
 import { Student } from '../models/student';
+import { GroupSchedule } from '../models/schedule-models';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +17,18 @@ export class TargetsService {
     private readonly api: ApiService,
     private readonly storage: StorageService,
   ) {
-    // const targets = this.storage.getTargets();
-    // if (targets) {
-    //   for (const target of targets) {
-    //     this.addGroup(target.group, target.students);
-    //   }
-    // }
+    if (location.search) {
+      return;
+    }
+    const targets = this.storage.getTargets();
+    if (!targets) {
+      return;
+    }
+    setTimeout(() => { // Чтобы успел подписаться метод обработки параметров роута
+      for (const target of targets) {
+        this.addGroup(target.group, target.students);
+      }
+    });
   }
 
   private targets: Target[] = [];
@@ -47,7 +54,7 @@ export class TargetsService {
         target.students.push(student);
       }
       this.targetsSubject.next(this.targets);
-      // this.storage.setTargets(this.targets);
+      this.storage.setTargets(this.targets);
     } else {
       this.addGroup(student.group, [student]);
     }
@@ -59,7 +66,23 @@ export class TargetsService {
       return existedTarget;
     }
 
-    const schedulePromise = this.api.getSchedule(group).toPromise();
+    const cahcedSchedule = this.storage.getGroupSchedule(group);
+    const apiSchedule = this.api.getSchedule(group).pipe(
+      retryWhen(errors => errors.pipe(
+        delayWhen(() => timer(10000))
+      )),
+    ).toPromise() as Promise<GroupSchedule>;
+
+    const schedulePromise = cahcedSchedule
+      && of(cahcedSchedule).toPromise()
+      || apiSchedule;
+
+
+    if (!cahcedSchedule) {
+      schedulePromise.then(schedule => this.storage.setGroupSchedule(schedule));
+    } else {
+      apiSchedule.then(schedule => this.storage.setGroupSchedule(schedule));
+    }
 
     const target: Target = {
       group,
@@ -75,7 +98,7 @@ export class TargetsService {
 
     this.targets.push(target);
     this.targetsSubject.next(this.targets);
-    // this.storage.setTargets(this.targets);
+    this.storage.setTargets(this.targets);
 
     return target;
   }
@@ -84,14 +107,14 @@ export class TargetsService {
     const target = this.targets.find(t => t.group === group);
     _.remove(this.targets, target);
     this.targetsSubject.next(this.targets);
-    // this.storage.setTargets(this.targets);
+    this.storage.setTargets(this.targets);
     return target;
   }
 
   public clear() {
     this.targets = [];
     this.targetsSubject.next(this.targets);
-    // this.storage.setTargets(this.targets);
+    this.storage.setTargets(this.targets);
   }
 
 }

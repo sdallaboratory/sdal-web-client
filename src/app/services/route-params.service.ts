@@ -14,7 +14,6 @@ export class RouteParamsService {
   ) {
     targets.targetsObservable.pipe(
       skip(1),
-      tap(console.log),
       map(ts => ts || []),
     ).subscribe(this.updateRoute.bind(this));
   }
@@ -24,7 +23,7 @@ export class RouteParamsService {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: groups.length && { groups } || {},
-      queryParamsHandling: 'merge',
+      // queryParamsHandling: 'merge',
     });
   }
 
@@ -35,7 +34,6 @@ export class RouteParamsService {
       map(groupsString => groupsString && groupsString.split(',') || []),
       first(),
     ).toPromise();
-    console.log(groups);
     for (const group of groups) {
       this.targets.addGroup(group);
     }

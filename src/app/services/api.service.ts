@@ -4,6 +4,8 @@ import { GroupSchedule, WeekInfo } from '../models/schedule-models';
 import { Student } from '../models/student';
 import { TargetsTelemetry } from '../models/telemetry-models';
 import { TouchUser } from '../models/touch-auth-models';
+import { Observable } from 'rxjs/internal/Observable';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +17,10 @@ export class ApiService {
   ) { }
 
   // TODO: Uppercase on server-side
-  public getSchedule(groupName: string) {
-    return this.http.get<GroupSchedule>(`/api/schedule/groups/${groupName.toUpperCase()}`);
+  public getSchedule(groupName: string): Observable<GroupSchedule> {
+    return this.http.get<GroupSchedule>(`/api/schedule/groups/${groupName.toUpperCase()}`).pipe(
+      tap((schedule: GroupSchedule) => schedule.name = schedule.name.trim())
+    );
   }
 
   public getGroups() {
@@ -61,3 +65,4 @@ export class ApiService {
   }
 
 }
+

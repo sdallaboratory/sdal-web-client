@@ -1,5 +1,14 @@
+:host {
+    display: block;
+}
+
 p {
     justify-content: space-between;
     display: flex;
     align-items: center;
+}
+
+.copy {
+    color: rgb(255, 34, 189) !important;
+    text-decoration: none !important;
 }

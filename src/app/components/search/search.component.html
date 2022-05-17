@@ -1,12 +1,13 @@
 <h3 mat-subheader>
-    Найти расписания
+    {{(targets.targetsObservable | async)?.length ? 'Добавить группы в сравнение' : 'Найти расписания групп'}}
+
 </h3>
 <mat-form-field mat-list-item>
-    <button color="primary" mat-raised-button matSuffix (click)="addFirst.next(); query.value = ''"
-        *ngIf="(searchResultLength | async) == 1">
-        <mat-icon>add</mat-icon> Добавить
+    <button color="primary" mat-raised-button matSuffix (click)="addFirst.next(); query.value = '';"
+        *ngIf="(search.groupsCount | async) == 1">
+        <mat-icon>add</mat-icon> Добавить {{(search.results | async).groups[0]}}
     </button>
-    <input #query type="text" matInput (keydown.enter)="addFirst.next()" placeholder="Введите группу или студента...">
+    <input #query type="text" matInput (keydown.enter)="addFirst.next()" placeholder="Введите название группы...">
     <button mat-icon-button matSuffix (click)="query.value = ''; clear.next()"
         [style.visibility]="query.value ? 'initial' : 'hidden'">
         <mat-icon>clear</mat-icon>
@@ -14,22 +15,25 @@
     <!-- <button mat-icon-button matPrefix>
         <mat-icon>help_outlined</mat-icon>
     </button> -->
-    <mat-hint *ngIf="(searchResultLength | async) == 1">Нажмите Enter, чтобы добавить</mat-hint>
+    <mat-hint *ngIf="(search.groupsCount | async) == 1">Нажмите Enter, чтобы добавить</mat-hint>
 </mat-form-field>
 <ng-container *ngIf="search.results | async as results">
-    <mat-list *ngIf="results.groups || results.students">
+    <mat-action-list *ngIf="results.groups || results.students">
         <ng-container *ngIf="results.groups">
             <h3 mat-subheader>Группы</h3>
-            <mat-list-item *ngFor="let group of results.groups">
+            <mat-list-item *ngFor="let group of groups | async" (click)="addGroup(group)">
                 <mat-icon mat-list-icon>supervised_user_circle</mat-icon>
                 <h4 mat-line class="group">{{group}}</h4>
-                <button class="add-button" mat-icon-button (click)="addGroup(group)">
+                <!-- <span mat-line >{{history.history.get(group)}} {{((history.history.get(group) || 0) % 10) | i18nPlural : {'=0': 'No messages.', '=1': 'One message.', 'other': '# messages.'}}}</span> -->
+                <mat-icon class="cached" *ngIf="group | inStorage"
+                    matTooltip="Расписание группы закешировано и доступно оффлайн">cached</mat-icon>
+                <button class="add-button" mat-icon-button matTooltip="Добавить группу к сравнению">
                     <mat-icon>add_circle_outlined</mat-icon>
                 </button>
             </mat-list-item>
         </ng-container>
         <!-- <mat-divider></mat-divider> -->
-        <ng-container *ngIf="results.students">
+        <!-- <ng-container *ngIf="results.students">
             <h3 mat-subheader>Студенты</h3>
             <mat-list-item *ngFor="let student of results.students">
                 <img mat-list-icon [src]="student.avatar" *ngIf="student.avatar" style="transform: scale(1.7)">
@@ -41,10 +45,19 @@
                     <mat-icon>add_circle_outlined</mat-icon>
                 </button>
             </mat-list-item>
-        </ng-container>
-    </mat-list>
-    <p *ngIf="!results.groups && !results.students">
-        По вашему запросу ничего не найдено. Скорее всего, расписание искомой группы или студента отсутсвует в
+        </ng-container> -->
+        <mat-list-item mat-button *ngIf="(search.groupsCount | async) - (groups | async).length as count"
+            (click)="limitClickStream.next(true)">
+            <mat-icon mat-list-icon>more_horiz</mat-icon>
+            Показать ещё {{count}}
+        </mat-list-item>
+    </mat-action-list>
+
+    <p *ngIf="!results.groups && !query.value">
+        Введите запрос, чтобы найти группы
+    </p>
+    <p *ngIf="!results.groups && query.value">
+        По вашему запросу ничего не найдено. Скорее всего, расписание искомой группы отсутсвует в
         электоронном университете.
     </p>
 </ng-container>

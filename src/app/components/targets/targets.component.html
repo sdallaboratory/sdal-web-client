@@ -9,7 +9,8 @@
         <!-- TODO: remove style="transform: scale(1.7)" attributes -->
         <ng-container *ngFor="let target of targetsList">
             <mat-list-item *ngIf="target.students && target.students.length == 1 && target.students[0] as student;">
-                <mat-icon mat-list-icon *ngIf="!target.scheduleLoaded" style="transform: scale(1.7)">all_out</mat-icon>
+                <mat-icon mat-list-icon *ngIf="!target.scheduleLoaded" style="transform: scale(1.7)" class="loading">
+                  autorenew</mat-icon>
                 <img mat-list-icon [src]="student.avatar" *ngIf="target.scheduleLoaded && student.avatar"
                     style="transform: scale(1.7)">
                 <mat-icon mat-list-icon *ngIf="target.scheduleLoaded && !student.avatar" style="transform: scale(1.7)">
@@ -21,17 +22,17 @@
                     <mat-icon>clear</mat-icon>
                 </button>
             </mat-list-item>
+            <!-- TODO: [style.color]="target.color" -->
             <mat-list-item *ngIf="!target.students || target.students.length !== 1">
-                <!-- TODO: [style.color]="target.color" -->
-                <mat-icon mat-list-icon style="transform: scale(1.7)">
-                    {{target.scheduleLoaded ? 'supervised_user_circle' : 'all_out'}}
+                <mat-icon mat-list-icon style="transform: scale(1.7)" [class.loading]="!target.scheduleLoaded">
+                    {{target.scheduleLoaded ? 'supervised_user_circle' : 'autorenew'}}
                 </mat-icon>
                 <h4 mat-line class="group">{{target.group}}</h4>
                 <span mat-line *ngIf="target.students as students">
                     ({{students[0].name}}<ng-container *ngIf="students.length > 1">
                         и ещё {{students.length - 1}}</ng-container>)
                 </span>
-                <button class="add-button" mat-icon-button (click)="targets.removeGroup(target.group)">
+                <button class="add-button" mat-icon-button (click)="targets.removeGroup(target.group)" (click)="1+1">
                     <mat-icon>clear</mat-icon>
                 </button>
             </mat-list-item>
