@@ -24,7 +24,7 @@ stages:
 
 build:
   stage: build
-  image: node:apline
+  image: node:18-alpine
   before_script:
     - yarn install --frozen-lockfile
     - yarn ngcc
