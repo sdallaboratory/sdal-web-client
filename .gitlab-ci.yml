@@ -1,8 +1,10 @@
 variables:
   APP_NAME: touch-web-cleint
-  DOCKER_IMAGE_NAME: "$CI_REGISTRY/sdalab/sdal-proxy"
+  APP_PORT: 80
+  DEPLOY_BASE_HREF: /touch/
+  DEPLOY_PUBLIC_PORT: 8000
+  DOCKER_IMAGE_NAME: $DOCKER_ORGANIZATION/$APP_NAME
   DOCKER_DRIVER: overlay2
-  APP_BASE_HREF: /touch/
   GIT_STRATEGY: clone
   GIT_SUBMODULE_STRATEGY: recursive
   # DOCKER_HOST: tcp://docker:2375/
@@ -27,7 +29,7 @@ build:
     - yarn install --frozen-lockfile
     - yarn ngcc
   script:
-    - yarn build --base-href $APP_BASE_HREF
+    - yarn build --base-href $DEPLOY_BASE_HREF
 
 # PUBLISH
 
@@ -37,11 +39,9 @@ publish:
   services:
     - docker:dind
   script:
-    - docker build -t $APP_NAME .
-  after_script:
-    - docker login --username=$DOCKER_USER --password=$DOCKER_PASSWD
-    - docker tag $APP_NAME $DOCKER_USER/$APP_NAME
-    - docker push $DOCKER_USER/$APP_NAME
+    - docker build -t $DOCKER_IMAGE_NAME .
+    - docker login --username=$DOCKER_USER --password=$DOCKER_TOKEN
+    - docker push $DOCKER_IMAGE_NAME
 
 # DEPLOY
 
@@ -51,6 +51,6 @@ deploy:
   needs:
     - publish
   script:
-    - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker pull almosvirog/sdal-touch
-    - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker rm -f sdal-touch || true
-    - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker run -d -p 1111:80 --name sdal-touch almosvirog/sdal-touch
+    - sshpass -p "$SDAL_DEFAULT_PASSWORD" ssh -oStrictHostKeyChecking=no $SDAL_DEFAULT_USERNAME@$SDAL_DEFAULT_IP docker pull $DOCKER_IMAGE_NAME
+    - sshpass -p "$SDAL_DEFAULT_PASSWORD" ssh -oStrictHostKeyChecking=no $SDAL_DEFAULT_USERNAME@$SDAL_DEFAULT_IP docker rm -f $APP_NAME || true
+    - sshpass -p "$SDAL_DEFAULT_PASSWORD" ssh -oStrictHostKeyChecking=no $SDAL_DEFAULT_USERNAME@$SDAL_DEFAULT_IP docker run -d -p $DEPLOY_PUBLIC_PORT:$APP_PORT --network=proxy --name $APP_NAME $DOCKER_IMAGE_NAME
