@@ -8,8 +8,6 @@ variables:
   DOCKER_DRIVER: overlay2
   GIT_STRATEGY: clone
   GIT_SUBMODULE_STRATEGY: recursive
-  # DOCKER_HOST: tcp://docker:2375/
-  # DOCKER_TLS_CERTDIR: ""
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -31,6 +29,10 @@ build:
     - yarn ngcc
   script:
     - yarn build --base-href $DEPLOY_BASE_HREF
+  artifacts:
+    paths:
+      - dist
+    expire_in: 1 day
 
 # PUBLISH
 
@@ -44,6 +46,8 @@ publish:
   after_script:
     - docker login --username=$DOCKER_USER --password=$DOCKER_TOKEN
     - docker push $DOCKER_IMAGE_NAME
+  needs:
+    - build
 
 # DEPLOY
 
