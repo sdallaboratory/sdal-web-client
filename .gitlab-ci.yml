@@ -25,7 +25,7 @@ stages:
 
 build:
   stage: build
-  image: node:18-alpine
+  image: node:16-alpine
   before_script:
     - yarn install --frozen-lockfile
     - yarn ngcc
@@ -52,7 +52,9 @@ deploy:
   image: ictu/sshpass
   needs:
     - publish
+  before_script:
+    - alias ssh-pass-server='sshpass -p "$SDAL_DEFAULT_PASSWORD" ssh -oStrictHostKeyChecking=no $SDAL_DEFAULT_USERNAME@$SDAL_DEFAULT_IP'
   script:
-    - sshpass -p "$SDAL_DEFAULT_PASSWORD" ssh -oStrictHostKeyChecking=no $SDAL_DEFAULT_USERNAME@$SDAL_DEFAULT_IP docker pull $DOCKER_IMAGE_NAME
-    - sshpass -p "$SDAL_DEFAULT_PASSWORD" ssh -oStrictHostKeyChecking=no $SDAL_DEFAULT_USERNAME@$SDAL_DEFAULT_IP docker rm -f $APP_NAME || true
-    - sshpass -p "$SDAL_DEFAULT_PASSWORD" ssh -oStrictHostKeyChecking=no $SDAL_DEFAULT_USERNAME@$SDAL_DEFAULT_IP docker run -d -p $DEPLOY_PUBLIC_PORT:$APP_PORT --network=$DEPLOY_NETWORK_NAME --name $APP_NAME $DOCKER_IMAGE_NAME
+    - ssh-pass-server docker pull $DOCKER_IMAGE_NAME
+    - ssh-pass-server docker rm -f $APP_NAME || true
+    - ssh-pass-server docker run -d -p $DEPLOY_PUBLIC_PORT:$APP_PORT --network=$DEPLOY_NETWORK_NAME --name $APP_NAME $DOCKER_IMAGE_NAME
