@@ -1,0 +1,32 @@
+<mat-card *ngIf="schedule.selectedLesson | async as lesson" class="mat-elevation-z8">
+    <!-- <div> -->
+    <mat-card-title>{{lesson.name}}
+        <button mat-icon-button (click)="schedule.selectedLesson.next(null)">
+            <mat-icon>clear</mat-icon>
+        </button>
+    </mat-card-title>
+    <mat-card-content>
+        <mat-chip-list>
+
+            <mat-chip color="warn" [selected]="true">
+                <mat-icon>group</mat-icon> &nbsp;{{lesson.group}}
+            </mat-chip>
+            <mat-chip color="primary" [selected]="true" *ngIf="lesson">
+                <mat-icon>calendar_today</mat-icon> &nbsp; {{lesson.week}}, {{lesson.day}}
+            </mat-chip>
+            <mat-chip color="primary" [selected]="true" *ngIf="lesson">
+                <mat-icon>access_time</mat-icon> &nbsp; {{lesson.timeRange}}
+            </mat-chip>
+            <mat-chip color="accent" [selected]="true" *ngIf="lesson.type">
+                <mat-icon>category</mat-icon> &nbsp;{{lesson.type}}
+            </mat-chip>
+            <mat-chip color="accent" [selected]="true" *ngIf="lesson.teacher">
+                <mat-icon>record_voice_over</mat-icon> &nbsp;{{lesson.teacher}}
+            </mat-chip>
+            <mat-chip color="accent" [selected]="true" *ngIf="lesson.location">
+                <mat-icon>my_location</mat-icon> &nbsp; {{lesson.location}}
+            </mat-chip>
+        </mat-chip-list>
+    </mat-card-content>
+    <!-- </div> -->
+</mat-card>

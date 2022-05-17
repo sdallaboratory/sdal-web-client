@@ -1,0 +1,48 @@
+<header>
+    <div>
+        <img src="assets/logo/touch-logo.svg" alt="SDAL Touch">
+    </div>
+    <button tabindex="0" mat-icon-button (click)="close()">
+        <mat-icon>clear</mat-icon>
+    </button>
+</header>
+<h1>Выбери время для встречи с друзьями</h1>
+<p>
+    Выбрать время для встречи с друзьями из Бауманки с новым сервисом от <a href="https://sdal.pw">Лаборатории анализа
+        социальных данных</a> просто как никогда.
+</p>
+<ol class="steps">
+    <li>
+        <h1>1</h1>
+        <div>Добавь через строку поиска несколько групп, расписание которых ты хочешь сравнить.</div>
+    </li>
+    <li>
+        <h1>2</h1>
+        <div>Перейди к списку рекомендаций, сформированных системой автоматически.</div>
+    </li>
+    <li>
+        <h1>3</h1>
+        <div>Выбери одну из рекомендаций или подбери время самостоятельно на основе сводной таблицы.</div>
+    </li>
+</ol>
+<h2>Любитель тёмных тем?</h2>
+<mat-slide-toggle [(ngModel)]="theme.isDark">Киберрежим</mat-slide-toggle>
+<br><br>
+<!-- Киберрежим специально для тебя!<br><br> -->
+Выбранное расписание сохраняется и ты можешь смотреть его даже оффлайн! Вот и всё, пользуйся на здоровье!<br><br>
+<button class="raised" (click)="close()" mat-raised-button color="accent">
+    <mat-icon>check_circle_outline</mat-icon>&nbsp;Я всё понял!
+</button>
+<!-- <h2>Фидбек</h2>
+<br>
+Что-то неясно? Знаешь, как сделать приложение лучше? Хочешь поучаствовать в разработке? -->
+<!-- <mat-form-field>
+    <textarea #textarea [disabled]="sent" matInput cols="30" rows="5" placeholder="Оставь комментарий"
+        [(ngModel)]="comment"></textarea>
+</mat-form-field>
+<button [disabled]="!comment" *ngIf="!sent" class="raised" mat-raised-button color="primary" (click)="send()">
+    <mat-icon>send</mat-icon>&nbsp;Отправить
+</button>
+<button *ngIf="sent" class="raised" mat-raised-button color="primary" (click)="sent = false; textarea.focus()">
+    <mat-icon>accessibility_new</mat-icon>&nbsp;Хочу написать ещё!
+</button> -->

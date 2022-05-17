@@ -1,0 +1,21 @@
+<h3 mat-subheader>Авторизация ВКонтакте</h3>
+<ng-template #vkAuthButton>
+    <div class="flex-container">
+        <p>Если ты учишься в МГТУ, авторизуйся через ВК, чтобы получить доступ к поиску по студентам.</p>
+        <button mat-button class="vk-logo" (click)="auth.signIn()">
+            Войти&nbsp;<img src="assets/vk/vk-logo.png" alt="VK" height="32px">
+        </button>
+    </div>
+</ng-template>
+<div *ngIf="auth.user | async as user; else vkAuthButton">
+    <div class="flex-container">
+        <img [src]="user.vkUser.photo_100" class="user-pic">
+        <h3>{{user.vkUser.first_name}} {{user.vkUser.last_name}} </h3>
+        <button mat-icon-button matTooltip="Выйти из аккаунта {{user.vkUser.first_name}} {{user.vkUser.last_name}}"
+            class="exit-button" (click)="auth.signOut()">
+            <mat-icon>exit_to_app</mat-icon>
+        </button>
+    </div>
+    <p *ngIf="!user.student">Вы не являетесь студентом МГТУ, либо ваш аккаунт не был распознан.</p>
+    <p *ngIf="user.student">Теперь, вы можете искать не только группы, но и конкретных студентов!</p>
+</div>

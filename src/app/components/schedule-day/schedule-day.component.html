@@ -1,0 +1,62 @@
+<!-- <h3 mat-header>{{day.dayName}}</h3>
+<mat-card [attr.id]="id" [class.today]="isToday">
+    <div class="time-slot">
+        <div *ngFor="let group of groups">
+            {{group}}
+        </div>
+    </div>
+    <div *ngFor="let slot of day.timeSlots; let odd = odd;" class="time-slot" [class.odd]="odd">
+        <div class="time-range">{{slot.timeRange}}</div>
+        <div class="groups-lessons">
+            <ng-container *ngFor="let lesson of slot.groupsLessons">
+                <div *ngIf="lesson.name; else empty" [style.background]="lesson.color"
+                    [matTooltip]="lesson | lessonTooltip" class="group-lesson" (click)="selectLesson(lesson)">
+                    {{lesson.type}}
+                    <ng-container *ngIf="slot.groupsLessons.length <= 2">
+                        {{lesson.name}}
+                    </ng-container> {{lesson.location}}
+                </div>
+            </ng-container>
+            <ng-template #empty>
+                <div></div>
+            </ng-template>
+        </div>
+    </div>
+</mat-card> -->
+
+<h3 mat-subheader>{{day.dayName}}
+    <ng-container *ngIf="isToday">
+        (сегодня)
+    </ng-container>
+</h3>
+<mat-card [attr.id]="id" [class.today]="isToday" color="primary">
+    <table>
+        <tr class="time-slot">
+            <th class="time-range" style="width: 43px"></th>
+            <th *ngFor="let group of groups" [style.width.%]="width">
+                {{group}}
+            </th>
+        </tr>
+        <tr *ngFor="let slot of day.timeSlots; let odd = odd;" class="time-slot" [class.odd]="odd"
+            [attr.id]="getSlotId(slot)" [class.selected]="getSlotId(slot) === hash">
+            <td class="time-range">
+                <span>{{slot.timeRange | timeRange : 'start' }}</span><br>
+                <span>{{slot.timeRange | timeRange : 'finish'}}</span>
+            </td>
+            <!-- < class="groups-lessons"> -->
+            <ng-container *ngFor="let lesson of slot.groupsLessons">
+                <td *ngIf="lesson.name; else empty" [style.background]="lesson.color"
+                    [matTooltip]="lesson | lessonTooltip" class="group-lesson" (click)="selectLesson(lesson)">
+                    {{lesson.type}}
+                    <ng-container *ngIf="slot.groupsLessons.length <= 2">
+                        {{lesson.name}}
+                    </ng-container> {{lesson.location}}
+                </td>
+            </ng-container>
+            <ng-template #empty>
+                <td></td>
+            </ng-template>
+            <!-- </> -->
+        </tr>
+    </table>
+</mat-card>

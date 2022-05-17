@@ -1,0 +1,48 @@
+@import "~@angular/material/theming";
+// Plus imports for other components in your app.
+
+@include mat-core();
+
+// hue. Available color palettes: https://material.io/design/color/
+$touch-primary: mat-palette($mat-light-blue);
+$touch-accent: mat-palette($mat-deep-purple, A200, A100, A400);
+
+$touch-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$touch-light-theme: mat-light-theme($touch-primary, $touch-accent, $touch-warn);
+
+@include angular-material-theme($touch-light-theme);
+
+$touch-dark-accent: mat-palette($mat-purple);
+$touch-dark-theme: mat-dark-theme($touch-dark-accent, $touch-dark-accent, $touch-warn);
+
+.sdal-dark {
+    @include angular-material-theme($touch-dark-theme);
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 6px;
+        border-width: 0px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #1f1f1f;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #de00cf55;
+        transition: 0.5s;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #de00cf;
+    }
+
+    mat-icon {
+        text-shadow: 0 0.5px 5px #cb11f2;
+    }
+}

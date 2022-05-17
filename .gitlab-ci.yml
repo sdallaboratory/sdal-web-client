@@ -1,0 +1,56 @@
+variables:
+  APP_NAME: touch-web-cleint
+  DOCKER_IMAGE_NAME: "$CI_REGISTRY/sdalab/sdal-proxy"
+  DOCKER_DRIVER: overlay2
+  APP_BASE_HREF: /touch/
+  GIT_STRATEGY: clone
+  GIT_SUBMODULE_STRATEGY: recursive
+  # DOCKER_HOST: tcp://docker:2375/
+  # DOCKER_TLS_CERTDIR: ""
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+stages:
+  - build
+  - publish
+  - deploy
+
+# BUILD
+
+build:
+  stage: build
+  image: node:apline
+  before_script:
+    - yarn install --frozen-lockfile
+    - yarn ngcc
+  script:
+    - yarn build --base-href $APP_BASE_HREF
+
+# PUBLISH
+
+publish:
+  stage: publish
+  image: docker
+  services:
+    - docker:dind
+  script:
+    - docker build -t $APP_NAME .
+  after_script:
+    - docker login --username=$DOCKER_USER --password=$DOCKER_PASSWD
+    - docker tag $APP_NAME $DOCKER_USER/$APP_NAME
+    - docker push $DOCKER_USER/$APP_NAME
+
+# DEPLOY
+
+deploy:
+  stage: deploy
+  image: ictu/sshpass
+  needs:
+    - publish
+  script:
+    - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker pull almosvirog/sdal-touch
+    - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker rm -f sdal-touch || true
+    - sshpass -p "$SDAL_PASSWD" ssh -oStrictHostKeyChecking=no root@95.216.188.201 docker run -d -p 1111:80 --name sdal-touch almosvirog/sdal-touch

@@ -1,0 +1,36 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    div {
+        flex: auto;
+    }
+    button {
+        flex: none;
+    }
+}
+
+.raised {
+    align-self: flex-end;
+}
+
+.steps {
+    padding: 0;
+    li {
+        display: flex;
+        align-items: center;
+        h1 {
+            font-size: 50px;
+            color: #00e6ff;
+            padding-right: 10px;
+        }
+        div {
+            padding: 10px;
+        }
+    }
+}

@@ -1,0 +1,46 @@
+<mat-sidenav-container class="example-sidenav-container">
+
+    <mat-sidenav #snav [mode]="(responsive.mobile | async) ? 'over' : 'side'" [opened]="opened | async"
+        class="mat-elevation-z6">
+        <div class="scroll-box">
+            <button mat-mini-fab (click)="snav.toggle()" class="close-button"
+                *ngIf="(target.targetsObservable | async)?.length">
+                <mat-icon>{{ (responsive.mobile | async) ? 'chevron_right' : 'chevron_left' }} </mat-icon>
+            </button>
+            <div class="touch-logo-wrapper">
+                <img src="assets/logo/touch-logo.svg" alt="SDAL Touch" class="touch-logo">
+            </div>
+            <div>
+                <sdal-targets></sdal-targets>
+            </div>
+            <div *ngIf="(responsive.mobile | async) && ((target.targetsObservable | async)?.length)">
+                <p>Перейдите к таблице или добавьте группы в сравнение ниже</p>
+                <button class="close-mobile" mat-raised-button color="primary" (click)="snav.toggle()">
+                    Перейти к таблице
+                </button>
+            </div>
+            <div>
+                <sdal-search></sdal-search>
+            </div>
+            <!-- <div>
+                <sdal-vk-oauth></sdal-vk-oauth>
+            </div> -->
+            <footer>
+                <sdal-footer></sdal-footer>
+            </footer>
+        </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <span>
+            <button mat-mini-fab (click)="snav.toggle()" class="menu-button" *ngIf="!snav.opened">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </span>
+        <div class="scroll-box">
+            <sdal-recommendations></sdal-recommendations>
+            <sdal-schedule-table></sdal-schedule-table>
+            <sdal-lesson-details></sdal-lesson-details>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

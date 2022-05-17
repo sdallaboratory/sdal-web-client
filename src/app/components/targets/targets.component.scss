@@ -1,0 +1,21 @@
+:host {
+    display: block;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.loading {
+    animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0) scale(1.7);
+    }
+    to {
+        transform: rotate(360deg) scale(1.7);
+    }
+}

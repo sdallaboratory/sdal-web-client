@@ -1,1 +1,63 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body,
+sdal-root {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+* {
+    user-select: none;
+}
+
+// sdal-home {
+//     transition: 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+// }
+
+h3 {
+    margin: 0;
+}
+
+.mat-sub-header {
+    margin: 0;
+}
+
+mat-icon {
+    vertical-align: middle;
+}
+
+.mat-drawer-inner-container {
+    display: flex;
+    flex-direction: column;
+}
+
+// .mat-drawer-inner-container {
+//     padding: 10px;
+// }
+
+p {
+    padding: 0 10px;
+}
+
+.about-modal-pane {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%;
+    max-height: 800px !important;
+}
+
+mat-dialog-container {
+    overflow: hidden;
+}
+
+mat-sidenav {
+    border: none !important;
+}
+
+input {
+    -webkit-user-select: all !important;
+}

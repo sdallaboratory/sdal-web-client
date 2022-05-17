@@ -1,0 +1,38 @@
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.time-slot {
+    justify-content: stretch;
+    .time-range {
+        flex: none;
+        border: 3px solid transparent;
+        width: unset;
+    }
+}
+
+.odd {
+    background: #d1d1d165;
+}
+
+td {
+    border: 3px solid transparent;
+    touch-action: initial !important;
+    &.group-lesson {
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:hover {
+            border-color: #00000044;
+        }
+    }
+}
+
+.today {
+    background: #88f1ff45;
+}
+
+.selected {
+    background: #ff9595aa;
+}
