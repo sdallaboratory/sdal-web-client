@@ -56,7 +56,6 @@ publish:
   services:
     - docker:dind
   script:
-    - cd server
     - docker build -t $DOCKER_IMAGE_NAME .
   after_script:
     - docker login --username=$DOCKER_USER --password=$DOCKER_TOKEN
