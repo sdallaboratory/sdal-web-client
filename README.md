@@ -22,9 +22,13 @@ yarn install --frozen-lockfile
 yarn start
 ```
 
-После сборки клиентского приложения автоматически откроется браузер по адресу <http://localhost:4200>. Любые изменения в коде клиента или сервера немедленно приведут к перекомпиляции.
+After installing deps you can run `Ctrl+Shift+B` in VS Code to run both server and client for development.
 
-Для сборки Docker-образа
+After client app is build it will automatically be opened at <http://localhost:4200>. Any changes in code will immediately run recompiling.
+
+## Docker
+
+Building Docker image
 
 ```bash
 yarn --cwd server build
