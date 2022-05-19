@@ -29,7 +29,6 @@ build_client:
     - cd client
   script:
     - yarn install --frozen-lockfile
-    - yarn ngcc
     - yarn build --base-href $DEPLOY_BASE_HREF
   artifacts:
     paths:
