@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://sdal.pw/",
+    "target": "http://localhost:3000/",
     "secure": true,
     "pathRewrite": {},
     "changeOrigin": true

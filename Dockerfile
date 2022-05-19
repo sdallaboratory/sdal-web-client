@@ -8,6 +8,6 @@ RUN yarn install --frozen-lockfile --production --cwd=server
 COPY server/dist/ server/dist/
 COPY client/dist/ client/dist/
 
-EXPOSE 80
+EXPOSE 3000
 
 CMD [ "yarn", "--cwd", "server", "start" ]
